@@ -1,21 +1,42 @@
 # Peppermint
 
-Peppermint is an iOS app for designing custom pill organizers in 3D, managing compartment medication details, and keeping organizer layouts saved locally.
+Peppermint - iOS-приложение для проектирования модульной таблетницы в 3D, назначения лекарств по ячейкам и подготовки дизайна к 3D-печати.
 
-## Features
+Проект основан на спецификации `specs/001-pill-organizer-3d/*`: офлайн-подход, локальное хранение, 3D-конструктор в стиле LEGO (ячейки с шагом 5 мм), категории и сроки годности лекарств, напоминания, экспорт STL.
 
-- Organizer library with empty state and saved cards
-- 3D constructor based on SceneKit
-- Component library for adding compartments
-- Compartment editing with medication details:
-  - name
-  - category
-  - expiration date
-  - notes
-- Local persistence via Core Data
-- Organizer thumbnail generation from 3D scene snapshots
+## Что это за проект
 
-## Tech Stack
+Приложение решает две задачи:
+
+- Конструктор таблетницы: собрать собственную структуру ячеек, крутить модель, сохранять варианты.
+- Медицинская разметка: для каждой ячейки хранить название лекарства, категорию, срок годности и заметки, чтобы быстро ориентироваться в уже напечатанной таблетнице.
+
+Целевая идея продукта: пользователь проектирует таблетницу в приложении, а затем экспортирует модель для печати на 3D-принтере.
+
+## Текущий статус реализации
+
+Согласно `tasks.md`, уже реализованы:
+
+- Базовая архитектура проекта и инфраструктура данных (Core Data, MVVM, SceneKit).
+- US1: 3D-конструктор (добавление/удаление ячеек, снап к сетке, сохранение, библиотека органайзеров).
+- US2: назначение лекарств, категории, предупреждения по сроку годности, фильтрация в библиотеке.
+
+Запланировано, но пока не завершено:
+
+- US3: напоминания и local notifications.
+- US4: экспорт STL для 3D-печати.
+- US5: расширенное управление несколькими дизайнами.
+
+## Ключевые возможности
+
+- 3D-сцена с жестами (масштаб, поворот, навигация).
+- Модульные ячейки с шагом 5 мм и проверкой пересечений.
+- Сохранение дизайнов и превью в локальную библиотеку.
+- Карточка ячейки: лекарство, категория, срок годности, заметки.
+- Визуальные индикаторы истекающих/просроченных лекарств.
+- Офлайн-first и локальное хранение данных.
+
+## Технологии
 
 - Swift 5.9
 - SwiftUI
@@ -24,54 +45,45 @@ Peppermint is an iOS app for designing custom pill organizers in 3D, managing co
 - XcodeGen (`project.yml`)
 - iOS 17.0+
 
-## Project Structure
+## Структура проекта
 
-- `Peppermint/App` - app entry and root views
-- `Peppermint/Views/Library` - organizer list and empty state
-- `Peppermint/Views/Constructor` - 3D editor and detail sheets
-- `Peppermint/ViewModels` - organizer and medication state logic
-- `Peppermint/Services` - scene setup, persistence, geometry helpers
-- `Peppermint/Models` - Core Data model classes
-- `Peppermint/Resources` - localized strings and presets
+- `Peppermint/App` - вход в приложение и корневая навигация
+- `Peppermint/Views/Library` - библиотека сохраненных органайзеров
+- `Peppermint/Views/Constructor` - 3D-конструктор и экран деталей ячейки
+- `Peppermint/ViewModels` - логика состояния и сценариев
+- `Peppermint/Services` - 3D-сцена, персистентность, генераторы геометрии
+- `Peppermint/Models` - Core Data сущности
+- `Peppermint/Resources` - локализация и предустановленные компоненты
 
-## Run Locally
+## Запуск локально
 
-1. Generate Xcode project:
+1. Сгенерировать Xcode-проект:
 
 ```bash
 xcodegen generate
 ```
 
-2. Open project:
+2. Открыть проект:
 
 ```bash
 open Peppermint.xcodeproj
 ```
 
-3. Build and run `Peppermint` target in Xcode.
+3. Запустить target `Peppermint` из Xcode.
 
-## Screenshots
+## Скриншоты
 
-> Add screenshot files to `docs/screenshots/` with the exact names below.
+<p>
+  <img src="docs/screenshots/01-library-empty.png" alt="Пустая библиотека" width="220" />
+  <img src="docs/screenshots/02-category-picker.png" alt="Выбор категории" width="220" />
+  <img src="docs/screenshots/03-medication-details.png" alt="Детали лекарства" width="220" />
+  <img src="docs/screenshots/04-constructor-3d.png" alt="3D-конструктор" width="220" />
+  <img src="docs/screenshots/05-library-with-item.png" alt="Библиотека с сохраненным органайзером" width="220" />
+</p>
 
-### Library Empty State
-![Library Empty State](docs/screenshots/01-library-empty.png)
+## Git и приватные файлы
 
-### Category Picker
-![Category Picker](docs/screenshots/02-category-picker.png)
-
-### Medication Details
-![Medication Details](docs/screenshots/03-medication-details.png)
-
-### 3D Constructor
-![3D Constructor](docs/screenshots/04-constructor-3d.png)
-
-### Library With Organizer
-![Library With Organizer](docs/screenshots/05-library-with-item.png)
-
-## Git Notes
-
-Local agent/spec files are excluded via `.gitignore`:
+В `.gitignore` исключены локальные служебные файлы:
 
 - `.claude/`
 - `.specify/`
