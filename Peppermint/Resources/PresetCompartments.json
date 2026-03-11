@@ -1,0 +1,167 @@
+{
+  "version": "1.0.0",
+  "components": [
+    {
+      "id": "small-1x1",
+      "name": "Small (1×1)",
+      "description": "Single grid cell compartment for small pills",
+      "dimensions": {
+        "width": 10,
+        "height": 10,
+        "depth": 10,
+        "wallThickness": 2.0
+      },
+      "connectorTemplate": {
+        "edges": {
+          "top": { "type": "tab", "offset": 0, "count": 1 },
+          "bottom": { "type": "groove", "offset": 0, "count": 1 },
+          "left": { "type": "tab", "offset": 0, "count": 1 },
+          "right": { "type": "groove", "offset": 0, "count": 1 },
+          "front": { "type": "none" },
+          "back": { "type": "none" }
+        },
+        "tabHeight": 2.0,
+        "grooveDepth": 1.2,
+        "tolerance": 0.3
+      },
+      "defaultColor": "#CCCCCC",
+      "icon": "square",
+      "category": "standard"
+    },
+    {
+      "id": "medium-2x1",
+      "name": "Medium (2×1)",
+      "description": "Double-width compartment for larger pills",
+      "dimensions": {
+        "width": 20,
+        "height": 10,
+        "depth": 10,
+        "wallThickness": 2.0
+      },
+      "connectorTemplate": {
+        "edges": {
+          "top": { "type": "tab", "offset": 0, "count": 2 },
+          "bottom": { "type": "groove", "offset": 0, "count": 2 },
+          "left": { "type": "tab", "offset": 0, "count": 1 },
+          "right": { "type": "groove", "offset": 0, "count": 1 },
+          "front": { "type": "none" },
+          "back": { "type": "none" }
+        },
+        "tabHeight": 2.0,
+        "grooveDepth": 1.2,
+        "tolerance": 0.3
+      },
+      "defaultColor": "#CCCCCC",
+      "icon": "rectangle",
+      "category": "standard"
+    },
+    {
+      "id": "large-2x2",
+      "name": "Large (2×2)",
+      "description": "Large compartment for vitamins or multiple pills",
+      "dimensions": {
+        "width": 20,
+        "height": 20,
+        "depth": 10,
+        "wallThickness": 2.0
+      },
+      "connectorTemplate": {
+        "edges": {
+          "top": { "type": "tab", "offset": 0, "count": 2 },
+          "bottom": { "type": "groove", "offset": 0, "count": 2 },
+          "left": { "type": "tab", "offset": 0, "count": 2 },
+          "right": { "type": "groove", "offset": 0, "count": 2 },
+          "front": { "type": "none" },
+          "back": { "type": "none" }
+        },
+        "tabHeight": 2.0,
+        "grooveDepth": 1.2,
+        "tolerance": 0.3
+      },
+      "defaultColor": "#CCCCCC",
+      "icon": "square.grid.2x2",
+      "category": "standard"
+    },
+    {
+      "id": "tall-1x1x2",
+      "name": "Tall (1×1×2)",
+      "description": "Tall compartment for bottles or blister packs",
+      "dimensions": {
+        "width": 10,
+        "height": 10,
+        "depth": 20,
+        "wallThickness": 2.0
+      },
+      "connectorTemplate": {
+        "edges": {
+          "top": { "type": "tab", "offset": 0, "count": 1 },
+          "bottom": { "type": "groove", "offset": 0, "count": 1 },
+          "left": { "type": "tab", "offset": 0, "count": 1 },
+          "right": { "type": "groove", "offset": 0, "count": 1 },
+          "front": { "type": "none" },
+          "back": { "type": "none" }
+        },
+        "tabHeight": 2.0,
+        "grooveDepth": 1.2,
+        "tolerance": 0.3
+      },
+      "defaultColor": "#CCCCCC",
+      "icon": "rectangle.portrait",
+      "category": "standard"
+    },
+    {
+      "id": "wide-3x1",
+      "name": "Wide (3×1)",
+      "description": "Wide compartment for daily pill organizers",
+      "dimensions": {
+        "width": 30,
+        "height": 10,
+        "depth": 10,
+        "wallThickness": 2.0
+      },
+      "connectorTemplate": {
+        "edges": {
+          "top": { "type": "tab", "offset": 0, "count": 3 },
+          "bottom": { "type": "groove", "offset": 0, "count": 3 },
+          "left": { "type": "tab", "offset": 0, "count": 1 },
+          "right": { "type": "groove", "offset": 0, "count": 1 },
+          "front": { "type": "none" },
+          "back": { "type": "none" }
+        },
+        "tabHeight": 2.0,
+        "grooveDepth": 1.2,
+        "tolerance": 0.3
+      },
+      "defaultColor": "#CCCCCC",
+      "icon": "rectangle.landscape",
+      "category": "standard"
+    },
+    {
+      "id": "divider-thin",
+      "name": "Thin Divider",
+      "description": "Thin divider to separate sections",
+      "dimensions": {
+        "width": 10,
+        "height": 5,
+        "depth": 5,
+        "wallThickness": 1.5
+      },
+      "connectorTemplate": {
+        "edges": {
+          "top": { "type": "tab", "offset": 0, "count": 1 },
+          "bottom": { "type": "groove", "offset": 0, "count": 1 },
+          "left": { "type": "none" },
+          "right": { "type": "none" },
+          "front": { "type": "none" },
+          "back": { "type": "none" }
+        },
+        "tabHeight": 2.0,
+        "grooveDepth": 1.2,
+        "tolerance": 0.3
+      },
+      "defaultColor": "#999999",
+      "icon": "rectangle.split.1x2",
+      "category": "divider"
+    }
+  ]
+}

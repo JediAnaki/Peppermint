@@ -1,0 +1,74 @@
+/* App Info */
+"app_name" = "Peppermint";
+"app_tagline" = "3D Pill Organizer";
+
+/* General */
+"save" = "Save";
+"cancel" = "Cancel";
+"delete" = "Delete";
+"edit" = "Edit";
+"done" = "Done";
+"create" = "Create";
+"add" = "Add";
+"remove" = "Remove";
+
+/* Organizer */
+"organizer_library_title" = "My Organizers";
+"create_organizer" = "Create New Organizer";
+"organizer_name" = "Organizer Name";
+"organizer_empty" = "No organizers yet";
+"organizer_delete_confirm" = "Are you sure you want to delete this organizer?";
+
+/* Constructor */
+"constructor_title" = "3D Builder";
+"component_library" = "Component Library";
+"add_compartment" = "Add Compartment";
+"compartment_details" = "Compartment Details";
+"dimensions" = "Dimensions";
+"position" = "Position";
+"color" = "Color";
+"width" = "Width";
+"height" = "Height";
+"depth" = "Depth";
+
+/* Medications */
+"medication" = "Medication";
+"medication_name" = "Medication Name";
+"medication_category" = "Category";
+"expiration_date" = "Expiration Date";
+"notes" = "Notes";
+"assign_medication" = "Assign Medication";
+"no_medication" = "No medication assigned";
+
+/* Reminders */
+"reminders" = "Reminders";
+"add_reminder" = "Add Reminder";
+"reminder_time" = "Time";
+"reminder_frequency" = "Frequency";
+"frequency_daily" = "Daily";
+"frequency_weekly" = "Weekly";
+"frequency_custom" = "Custom";
+"days_of_week" = "Days of Week";
+"enable_notifications" = "Enable Notifications";
+
+/* Export */
+"export_stl" = "Export to STL";
+"export_success" = "Export successful";
+"export_failed" = "Export failed";
+"share" = "Share";
+
+/* Expiration Warnings */
+"expiring_soon" = "Expiring Soon";
+"expired" = "Expired";
+"expires_in_%d_days" = "Expires in %d days";
+
+/* Accessibility */
+"compartment_voiceover" = "Compartment at position %d, %d, %d";
+"medication_voiceover" = "Medication: %@";
+"reminder_voiceover" = "Reminder set for %@";
+
+/* Errors */
+"error" = "Error";
+"error_generic" = "Something went wrong";
+"error_save_failed" = "Failed to save";
+"error_load_failed" = "Failed to load";

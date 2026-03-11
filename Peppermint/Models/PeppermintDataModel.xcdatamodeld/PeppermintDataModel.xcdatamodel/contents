@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="22225" systemVersion="23A344" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="OrganizerDesign" representedClassName="OrganizerDesign" syncable="YES">
+        <attribute name="createdAt" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="modifiedAt" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="name" attributeType="String"/>
+        <attribute name="thumbnailData" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
+        <relationship name="compartments" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Compartment" inverseName="organizer" inverseEntity="Compartment"/>
+        <relationship name="exportHistory" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ExportHistory" inverseName="organizer" inverseEntity="ExportHistory"/>
+    </entity>
+    <entity name="Compartment" representedClassName="Compartment" syncable="YES">
+        <attribute name="colorHex" attributeType="String" defaultValueString="#CCCCCC"/>
+        <attribute name="connectorMetadata" attributeType="Binary"/>
+        <attribute name="createdAt" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="depth" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="height" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="positionX" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="positionY" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="positionZ" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="width" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <relationship name="medication" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Medication" inverseName="compartment" inverseEntity="Medication"/>
+        <relationship name="organizer" maxCount="1" deletionRule="Nullify" destinationEntity="OrganizerDesign" inverseName="compartments" inverseEntity="OrganizerDesign"/>
+    </entity>
+    <entity name="Medication" representedClassName="Medication" syncable="YES">
+        <attribute name="category" optional="YES" attributeType="String"/>
+        <attribute name="createdAt" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="expirationDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="modifiedAt" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="name" attributeType="String"/>
+        <attribute name="notes" optional="YES" attributeType="String"/>
+        <relationship name="compartment" maxCount="1" deletionRule="Cascade" destinationEntity="Compartment" inverseName="medication" inverseEntity="Compartment"/>
+        <relationship name="reminderSchedules" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="ReminderSchedule" inverseName="medication" inverseEntity="ReminderSchedule"/>
+    </entity>
+    <entity name="ReminderSchedule" representedClassName="ReminderSchedule" syncable="YES">
+        <attribute name="createdAt" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="customDates" optional="YES" attributeType="Binary"/>
+        <attribute name="daysOfWeek" optional="YES" attributeType="Binary"/>
+        <attribute name="enabled" attributeType="Boolean" defaultValueString="YES" usesScalarValueType="YES"/>
+        <attribute name="frequency" attributeType="String" defaultValueString="daily"/>
+        <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="modifiedAt" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="soundName" optional="YES" attributeType="String"/>
+        <attribute name="timesOfDay" attributeType="Binary"/>
+        <relationship name="medication" maxCount="1" deletionRule="Cascade" destinationEntity="Medication" inverseName="reminderSchedules" inverseEntity="Medication"/>
+    </entity>
+    <entity name="ExportHistory" representedClassName="ExportHistory" syncable="YES">
+        <attribute name="compartmentCount" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="exportDuration" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="exportedAt" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="fileName" attributeType="String"/>
+        <attribute name="fileSize" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
+        <relationship name="organizer" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="OrganizerDesign" inverseName="exportHistory" inverseEntity="OrganizerDesign"/>
+    </entity>
+</model>
