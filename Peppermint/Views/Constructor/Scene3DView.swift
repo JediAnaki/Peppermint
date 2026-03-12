@@ -217,10 +217,19 @@ struct Scene3DView: UIViewRepresentable {
             textNode.constraints = [billboardConstraint]
 
             // Add expiration warning indicator if needed
+            var xOffset: Float = -2.0
             if medication.isExpiringSoon || medication.isExpired {
                 let warningNode = createExpirationWarningIndicator(for: medication)
-                warningNode.position = SCNVector3(-2, 1, 0) // To the left of label
+                warningNode.position = SCNVector3(xOffset, 1, 0) // To the left of label
                 textNode.addChildNode(warningNode)
+                xOffset -= 2.5 // Move next indicator further left
+            }
+
+            // Add reminder indicator if active reminders exist
+            if medication.hasActiveReminders {
+                let reminderNode = createReminderIndicator()
+                reminderNode.position = SCNVector3(xOffset, 1, 0)
+                textNode.addChildNode(reminderNode)
             }
 
             return textNode
@@ -245,6 +254,55 @@ struct Scene3DView: UIViewRepresentable {
             let pulse = SCNAction.sequence([scaleUp, scaleDown])
             let repeatPulse = SCNAction.repeatForever(pulse)
             node.runAction(repeatPulse)
+
+            return node
+        }
+
+        /// Create a visual indicator for active reminders (bell icon)
+        private func createReminderIndicator() -> SCNNode {
+            // Create a simplified bell shape using cylinders and a sphere
+            let node = SCNNode()
+
+            // Bell body (cone-like cylinder)
+            let bellBody = SCNCylinder(radius: 0.6, height: 1.0)
+            let bellMaterial = SCNMaterial()
+            bellMaterial.diffuse.contents = UIColor.systemBlue
+            bellMaterial.lightingModel = .constant
+            bellBody.materials = [bellMaterial]
+
+            let bellBodyNode = SCNNode(geometry: bellBody)
+            bellBodyNode.position = SCNVector3(0, 0, 0)
+
+            // Bell clapper (small sphere at bottom)
+            let clapper = SCNSphere(radius: 0.2)
+            clapper.materials = [bellMaterial]
+
+            let clapperNode = SCNNode(geometry: clapper)
+            clapperNode.position = SCNVector3(0, -0.6, 0)
+
+            // Badge (small red sphere for notification badge)
+            let badge = SCNSphere(radius: 0.3)
+            let badgeMaterial = SCNMaterial()
+            badgeMaterial.diffuse.contents = UIColor.systemRed
+            badgeMaterial.lightingModel = .constant
+            badge.materials = [badgeMaterial]
+
+            let badgeNode = SCNNode(geometry: badge)
+            badgeNode.position = SCNVector3(0.5, 0.5, 0)
+
+            // Assemble bell
+            node.addChildNode(bellBodyNode)
+            node.addChildNode(clapperNode)
+            node.addChildNode(badgeNode)
+
+            // Add subtle ringing animation
+            let rotateLeft = SCNAction.rotateBy(x: 0, y: 0, z: CGFloat.pi / 16, duration: 0.1)
+            let rotateRight = SCNAction.rotateBy(x: 0, y: 0, z: -CGFloat.pi / 8, duration: 0.2)
+            let rotateBack = SCNAction.rotateBy(x: 0, y: 0, z: CGFloat.pi / 16, duration: 0.1)
+            let wait = SCNAction.wait(duration: 2.0)
+            let ring = SCNAction.sequence([rotateLeft, rotateRight, rotateBack, wait])
+            let repeatRing = SCNAction.repeatForever(ring)
+            node.runAction(repeatRing)
 
             return node
         }
