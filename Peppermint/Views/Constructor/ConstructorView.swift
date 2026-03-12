@@ -22,6 +22,8 @@ struct ConstructorView: View {
     @State private var sceneViewRef: SCNView?
     @State private var showingDeleteConfirmation = false
     @State private var showingMedicationSheet = false
+    @State private var showingExportSheet = false
+    @State private var isExporting = false
 
     // MARK: - Body
 
@@ -56,8 +58,17 @@ struct ConstructorView: View {
             }
 
             ToolbarItem(placement: .navigationBarTrailing) {
-                Button(action: saveOrganizer) {
-                    Image(systemName: "checkmark")
+                HStack(spacing: 12) {
+                    // Export button
+                    Button(action: { isExporting = true }) {
+                        Image(systemName: "square.and.arrow.up")
+                    }
+                    .disabled(viewModel.compartments.isEmpty)
+
+                    // Save button
+                    Button(action: saveOrganizer) {
+                        Image(systemName: "checkmark")
+                    }
                 }
             }
         }
@@ -87,6 +98,62 @@ struct ConstructorView: View {
             if newValue != nil {
                 showingMedicationSheet = true
             }
+        }
+        .onChange(of: isExporting) { _, shouldExport in
+            if shouldExport {
+                Task {
+                    await performExport()
+                }
+            }
+        }
+        .sheet(isPresented: $showingExportSheet) {
+            if let items = viewModel.exportedFileURL {
+                ShareSheet(items: [items])
+            }
+        }
+        .overlay {
+            if viewModel.isLoading {
+                exportProgressOverlay
+            }
+        }
+        .alert("Export Error", isPresented: Binding(
+            get: { viewModel.errorMessage != nil && !viewModel.isLoading },
+            set: { if !$0 { viewModel.errorMessage = nil } }
+        )) {
+            Button("OK", role: .cancel) {
+                viewModel.errorMessage = nil
+            }
+        } message: {
+            if let error = viewModel.errorMessage {
+                Text(error)
+            }
+        }
+    }
+
+    // MARK: - Export Progress Overlay
+
+    private var exportProgressOverlay: some View {
+        ZStack {
+            Color.black.opacity(0.4)
+                .ignoresSafeArea()
+
+            VStack(spacing: 20) {
+                ProgressView(value: viewModel.exportProgress)
+                    .progressViewStyle(.linear)
+                    .frame(width: 200)
+
+                Text("Exporting to STL...")
+                    .font(.headline)
+                    .foregroundColor(.white)
+
+                Text("\(Int(viewModel.exportProgress * 100))%")
+                    .font(.caption)
+                    .foregroundColor(.white.opacity(0.8))
+            }
+            .padding(30)
+            .background(Color(UIColor.systemBackground))
+            .cornerRadius(16)
+            .shadow(radius: 20)
         }
     }
 
@@ -133,6 +200,30 @@ struct ConstructorView: View {
             viewModel.removeCompartment(compartment)
             selectedCompartment = nil
         }
+    }
+
+    private func performExport() async {
+        let success = await viewModel.exportToSTL()
+        isExporting = false
+
+        if success {
+            showingExportSheet = true
+        }
+    }
+}
+
+// MARK: - Share Sheet
+
+struct ShareSheet: UIViewControllerRepresentable {
+    let items: [Any]
+
+    func makeUIViewController(context: Context) -> UIActivityViewController {
+        let controller = UIActivityViewController(activityItems: items, applicationActivities: nil)
+        return controller
+    }
+
+    func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {
+        // No update needed
     }
 }
 
