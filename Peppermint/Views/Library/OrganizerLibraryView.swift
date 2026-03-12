@@ -32,6 +32,9 @@ struct OrganizerLibraryView: View {
     @State private var filterCategory: String?
     @State private var filterColor: String?
     @State private var showingFilterMenu = false
+    @State private var showingRenameAlert = false
+    @State private var organizerToRename: OrganizerDesign?
+    @State private var renameText = ""
 
     @StateObject private var viewModel = OrganizerViewModel()
     @StateObject private var medicationViewModel = MedicationViewModel()
@@ -90,6 +93,20 @@ struct OrganizerLibraryView: View {
                 }
             } message: {
                 Text("Are you sure you want to delete this organizer? This action cannot be undone.")
+            }
+            .alert("Rename Organizer", isPresented: $showingRenameAlert) {
+                TextField("Organizer Name", text: $renameText)
+                Button("Cancel", role: .cancel) {
+                    organizerToRename = nil
+                    renameText = ""
+                }
+                Button("Rename") {
+                    if let organizer = organizerToRename {
+                        performRename(organizer)
+                    }
+                }
+            } message: {
+                Text("Enter a new name for this organizer")
             }
         }
     }
@@ -269,8 +286,26 @@ struct OrganizerLibraryView: View {
     }
 
     private func renameOrganizer(_ organizer: OrganizerDesign) {
-        // TODO: Implement rename functionality with alert
-        print("Rename organizer: \(organizer.name ?? "")")
+        organizerToRename = organizer
+        renameText = organizer.name ?? ""
+        showingRenameAlert = true
+    }
+
+    private func performRename(_ organizer: OrganizerDesign) {
+        let trimmedName = renameText.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmedName.isEmpty else { return }
+
+        organizer.name = trimmedName
+        organizer.modifiedAt = Date()
+
+        do {
+            try viewContext.save()
+        } catch {
+            print("Error renaming organizer: \(error)")
+        }
+
+        organizerToRename = nil
+        renameText = ""
     }
 
     private func duplicateOrganizer(_ organizer: OrganizerDesign) {
