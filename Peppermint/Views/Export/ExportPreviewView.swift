@@ -206,7 +206,6 @@ struct SceneKitPreviewView: UIViewRepresentable {
 // MARK: - Preview Provider
 
 #Preview {
-    // Mock organizer for preview
     let context = DataPersistenceService.preview.viewContext
     let organizer = OrganizerDesign(context: context)
     organizer.id = UUID()
@@ -214,5 +213,5 @@ struct SceneKitPreviewView: UIViewRepresentable {
     organizer.createdAt = Date()
     organizer.modifiedAt = Date()
 
-    ExportPreviewView(organizer: organizer)
+    return ExportPreviewView(organizer: organizer)
 }
