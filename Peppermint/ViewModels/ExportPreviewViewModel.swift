@@ -260,7 +260,8 @@ final class ExportPreviewViewModel: ObservableObject {
 private extension Compartment {
     /// Converts hex color string to UIColor
     var uiColor: UIColor {
-        let hex = colorHex.trimmingCharacters(in: CharacterSet(charactersIn: "#"))
+        let hexString = colorHex ?? "#CCCCCC"
+        let hex = hexString.trimmingCharacters(in: CharacterSet(charactersIn: "#"))
         var rgb: UInt64 = 0
 
         Scanner(string: hex).scanHexInt64(&rgb)
