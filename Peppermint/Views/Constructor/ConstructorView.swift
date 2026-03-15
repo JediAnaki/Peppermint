@@ -18,6 +18,7 @@ struct ConstructorView: View {
 
     @StateObject private var viewModel = OrganizerViewModel()
     @StateObject private var medicationViewModel = MedicationViewModel()
+    @StateObject private var exportViewModel = ExportPreviewViewModel()
     @State private var selectedCompartment: Compartment?
     @State private var sceneViewRef: SCNView?
     @State private var showingDeleteConfirmation = false
@@ -59,11 +60,13 @@ struct ConstructorView: View {
 
             ToolbarItem(placement: .navigationBarTrailing) {
                 HStack(spacing: 12) {
-                    // Export button
-                    Button(action: { isExporting = true }) {
-                        Image(systemName: "square.and.arrow.up")
+                    // Export for 3D Printing button (with interactive preview)
+                    Button(action: { exportViewModel.showPreview(for: organizer) }) {
+                        Image(systemName: "cube.box")
                     }
                     .disabled(viewModel.compartments.isEmpty)
+                    .accessibilityLabel("Export for 3D Printing")
+                    .accessibilityHint("Show interactive 3D preview before exporting")
 
                     // Save button
                     Button(action: saveOrganizer) {
@@ -92,6 +95,9 @@ struct ConstructorView: View {
                     compartment: compartment
                 )
             }
+        }
+        .sheet(isPresented: $exportViewModel.isShowingPreview) {
+            ExportPreviewView(organizer: organizer)
         }
         .onChange(of: selectedCompartment) { _, newValue in
             // Auto-open medication sheet when compartment is tapped
