@@ -54,7 +54,7 @@ class Scene3DService {
         // Note: renderingAPI is read-only and defaults to Metal on modern iOS
         // sceneView.renderingAPI is set during SCNView initialization
 
-        // Performance settings
+        // Performance settings (T080: Optimization)
         sceneView.preferredFramesPerSecond = Scene3DService.targetFPS
         sceneView.antialiasingMode = .multisampling2X  // Balance quality/performance
 
@@ -64,8 +64,15 @@ class Scene3DService {
         // Allow user camera control via gestures
         sceneView.allowsCameraControl = false  // We'll handle gestures manually
 
-        // Background color (Dark Mode compatible)
+        // Background color (Dark Mode compatible, T078)
         sceneView.backgroundColor = UIColor.systemBackground
+
+        // T080: Additional rendering optimizations
+        // Enable jittering for improved antialiasing
+        sceneView.isJitteringEnabled = true
+
+        // Enable temporal antialiasing for smoother motion
+        sceneView.isTemporalAntialiasingEnabled = true
 
         // Enable statistics overlay in debug mode
         #if DEBUG

@@ -8,6 +8,7 @@
 import Foundation
 import Combine
 import UserNotifications
+import UIKit
 
 /// ViewModel managing reminder schedules for medications with UserNotifications authorization
 @MainActor

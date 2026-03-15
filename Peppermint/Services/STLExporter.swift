@@ -321,7 +321,8 @@ class STLExporter {
     static func export(organizer: OrganizerDesign, to url: URL) throws -> ExportStats {
         let startTime = Date()
 
-        guard let compartments = organizer.compartmentsArray, !compartments.isEmpty else {
+        let compartments = organizer.compartmentsArray
+        guard !compartments.isEmpty else {
             throw STLExportError.emptyOrganizer
         }
 

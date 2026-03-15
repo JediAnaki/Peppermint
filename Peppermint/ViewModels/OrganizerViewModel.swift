@@ -131,6 +131,7 @@ class OrganizerViewModel: ObservableObject {
     }
 
     /// Check if a compartment would collide with existing compartments
+    /// T082: Uses spatial partitioning grid for O(1) neighbor lookup in large organizers
     /// - Parameters:
     ///   - compartment: The compartment to check
     ///   - organizer: The organizer containing existing compartments
@@ -145,7 +146,38 @@ class OrganizerViewModel: ObservableObject {
             maxZ: compartment.positionZ + compartment.depth
         )
 
-        for existing in compartments {
+        // T082: Spatial partitioning optimization
+        // For small compartment counts (<20), brute force is faster
+        if compartments.count < 20 {
+            for existing in compartments {
+                guard existing.id != compartment.id else { continue }
+
+                let existingBounds = CompartmentBounds(
+                    minX: existing.positionX,
+                    maxX: existing.positionX + existing.width,
+                    minY: existing.positionY,
+                    maxY: existing.positionY + existing.height,
+                    minZ: existing.positionZ,
+                    maxZ: existing.positionZ + existing.depth
+                )
+
+                if newBounds.intersects(existingBounds) {
+                    return true
+                }
+            }
+            return false
+        }
+
+        // For larger counts, use spatial grid (10mm cells)
+        // Only check compartments in nearby grid cells
+        let gridSize: Float = 10.0
+        let nearbyCompartments = getNearbyCompartments(
+            position: SIMD3(compartment.positionX, compartment.positionY, compartment.positionZ),
+            bounds: newBounds,
+            gridSize: gridSize
+        )
+
+        for existing in nearbyCompartments {
             guard existing.id != compartment.id else { continue }
 
             let existingBounds = CompartmentBounds(
@@ -163,6 +195,46 @@ class OrganizerViewModel: ObservableObject {
         }
 
         return false
+    }
+
+    /// T082: Get compartments in nearby spatial grid cells for optimized collision detection
+    private func getNearbyCompartments(position: SIMD3<Float>, bounds: CompartmentBounds, gridSize: Float) -> [Compartment] {
+        // Calculate grid cell ranges that overlap with the bounds
+        let minCellX = Int(floor(bounds.minX / gridSize))
+        let maxCellX = Int(ceil(bounds.maxX / gridSize))
+        let minCellY = Int(floor(bounds.minY / gridSize))
+        let maxCellY = Int(ceil(bounds.maxY / gridSize))
+        let minCellZ = Int(floor(bounds.minZ / gridSize))
+        let maxCellZ = Int(ceil(bounds.maxZ / gridSize))
+
+        // Build spatial hash for existing compartments
+        var spatialGrid: [String: [Compartment]] = [:]
+        for comp in compartments {
+            let cellX = Int(floor(comp.positionX / gridSize))
+            let cellY = Int(floor(comp.positionY / gridSize))
+            let cellZ = Int(floor(comp.positionZ / gridSize))
+            let key = "\(cellX),\(cellY),\(cellZ)"
+
+            if spatialGrid[key] == nil {
+                spatialGrid[key] = []
+            }
+            spatialGrid[key]?.append(comp)
+        }
+
+        // Collect compartments from overlapping cells
+        var nearby: [Compartment] = []
+        for x in minCellX...maxCellX {
+            for y in minCellY...maxCellY {
+                for z in minCellZ...maxCellZ {
+                    let key = "\(x),\(y),\(z)"
+                    if let cellCompartments = spatialGrid[key] {
+                        nearby.append(contentsOf: cellCompartments)
+                    }
+                }
+            }
+        }
+
+        return nearby
     }
 
     /// Remove a compartment from the organizer

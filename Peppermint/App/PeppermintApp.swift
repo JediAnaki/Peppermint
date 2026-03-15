@@ -20,14 +20,43 @@ struct PeppermintApp: App {
 class AppDelegate: NSObject, UIApplicationDelegate {
     let notificationHandler = NotificationHandler()
 
+    // T083: App launch performance tracking
+    private var launchStartTime: CFAbsoluteTime = 0
+
     func application(
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
     ) -> Bool {
+        // T083: Record launch start time
+        launchStartTime = CFAbsoluteTimeGetCurrent()
+
         // Set up notification service
         UNUserNotificationCenter.current().delegate = NotificationService.shared
 
+        // T083: Schedule first frame tracking
+        DispatchQueue.main.async { [weak self] in
+            self?.trackFirstFrame()
+        }
+
         return true
+    }
+
+    // T083: Track time from launch to first frame render
+    private func trackFirstFrame() {
+        let launchDuration = CFAbsoluteTimeGetCurrent() - launchStartTime
+
+        #if DEBUG
+        print("⏱️ App launch performance: \(String(format: "%.3f", launchDuration))s")
+
+        if launchDuration > 2.0 {
+            print("⚠️ WARNING: App launch took longer than 2 seconds (target)")
+        } else {
+            print("✅ App launch performance is within target (<2s)")
+        }
+        #endif
+
+        // In production, this could be sent to analytics
+        // Analytics.track("app_launch_duration", duration: launchDuration)
     }
 }
 

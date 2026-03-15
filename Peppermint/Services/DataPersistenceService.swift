@@ -1,5 +1,6 @@
 import Foundation
 import CoreData
+import CloudKit
 
 class DataPersistenceService {
     static let shared = DataPersistenceService()
@@ -28,27 +29,49 @@ class DataPersistenceService {
 
     // MARK: - Core Data Stack
 
-    lazy var persistentContainer: NSPersistentContainer = {
-        let container = NSPersistentContainer(name: "PeppermintDataModel")
+    lazy var persistentContainer: NSPersistentCloudKitContainer = {
+        // Use NSPersistentCloudKitContainer for CloudKit support (T014)
+        let container = NSPersistentCloudKitContainer(name: "PeppermintDataModel")
 
         if inMemory {
             // Use in-memory store for previews/testing
             container.persistentStoreDescriptions.first!.url = URL(fileURLWithPath: "/dev/null")
         } else {
+            // Configure CloudKit container options based on user preference
+            if UserDefaults.standard.bool(forKey: "cloudSyncEnabled") {
+                configureCloudKitContainer(for: container)
+            } else {
+                disableCloudKitContainer(for: container)
+            }
+
             // Configure encryption for production
             let storeDescription = container.persistentStoreDescriptions.first
             storeDescription?.setOption(FileProtectionType.complete as NSObject,
                                        forKey: NSPersistentStoreFileProtectionKey)
+
+            // Enable automatic lightweight migration (T014)
+            storeDescription?.setOption(true as NSNumber, forKey: NSMigratePersistentStoresAutomaticallyOption)
+            storeDescription?.setOption(true as NSNumber, forKey: NSInferMappingModelAutomaticallyOption)
         }
 
         container.loadPersistentStores { description, error in
             if let error = error as NSError? {
                 fatalError("Unresolved error \(error), \(error.userInfo)")
             }
+            print("✅ CoreData loaded: \(description)")
         }
 
+        // T015: Configure merge policies for conflict resolution
         container.viewContext.automaticallyMergesChangesFromParent = true
         container.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+
+        // Listen for remote changes from CloudKit
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handleRemoteChange),
+            name: .NSPersistentStoreRemoteChange,
+            object: container.persistentStoreCoordinator
+        )
 
         return container
     }()
@@ -240,4 +263,104 @@ class DataPersistenceService {
         saveContext()
         return history
     }
+
+    // MARK: - CloudKit Configuration (T014)
+
+    /// Configures CloudKit container options for cloud sync
+    ///
+    /// This enables automatic synchronization with iCloud for organizer designs
+    private func configureCloudKitContainer(for container: NSPersistentCloudKitContainer) {
+        guard let description = container.persistentStoreDescriptions.first else { return }
+
+        // Set CloudKit container identifier from entitlements
+        description.cloudKitContainerOptions = NSPersistentCloudKitContainerOptions(
+            containerIdentifier: "iCloud.com.peppermint.organizer"
+        )
+
+        // Enable persistent history tracking for conflict detection (T015)
+        description.setOption(true as NSNumber, forKey: NSPersistentHistoryTrackingKey)
+
+        // Enable remote change notifications
+        description.setOption(true as NSNumber, forKey: NSPersistentStoreRemoteChangeNotificationPostOptionKey)
+
+        print("✅ CloudKit container enabled for cloud sync")
+    }
+
+    /// Disables CloudKit container for local-only mode
+    ///
+    /// This ensures no data is synced to iCloud when cloud backup is disabled
+    private func disableCloudKitContainer(for container: NSPersistentCloudKitContainer) {
+        guard let description = container.persistentStoreDescriptions.first else { return }
+
+        // Disable CloudKit sync
+        description.cloudKitContainerOptions = nil
+
+        print("📍 CloudKit container disabled (local-only mode)")
+    }
+
+    /// Handles remote changes from CloudKit
+    ///
+    /// This is called automatically when another device pushes changes to iCloud
+    @objc private func handleRemoteChange(_ notification: Notification) {
+        print("☁️ Remote change detected from CloudKit")
+
+        // Notify UI to refresh (e.g., organizer library)
+        DispatchQueue.main.async {
+            NotificationCenter.default.post(name: .cloudSyncCompleted, object: nil)
+        }
+    }
+
+    // MARK: - Cloud Sync Control
+
+    /// Enables cloud backup for all existing organizers
+    ///
+    /// Called when user enables cloud sync in Settings
+    func enableCloudKit() {
+        UserDefaults.standard.set(true, forKey: "cloudSyncEnabled")
+
+        // Mark all existing organizers for cloud sync
+        let organizers = fetchAllOrganizers()
+        for organizer in organizers {
+            organizer.cloudSyncEnabled = true
+            organizer.markForSync()
+        }
+
+        saveContext()
+        print("✅ Enabled cloud sync for \(organizers.count) organizers")
+
+        // Reload persistent container with CloudKit enabled
+        // Note: In production, this requires app restart or manual container reload
+    }
+
+    /// Disables cloud backup for all organizers
+    ///
+    /// Called when user disables cloud sync in Settings
+    /// Note: Does not delete data from iCloud, just stops future syncing
+    func disableCloudKit() {
+        UserDefaults.standard.set(false, forKey: "cloudSyncEnabled")
+
+        // Update all organizers to local-only mode
+        let organizers = fetchAllOrganizers()
+        for organizer in organizers {
+            organizer.cloudSyncEnabled = false
+        }
+
+        saveContext()
+        print("📍 Disabled cloud sync (data remains local)")
+    }
+
+    /// Checks if cloud sync is currently enabled
+    var isCloudSyncEnabled: Bool {
+        return UserDefaults.standard.bool(forKey: "cloudSyncEnabled")
+    }
+}
+
+// MARK: - Notification Names
+
+extension Notification.Name {
+    /// Posted when CloudKit sync completes successfully
+    static let cloudSyncCompleted = Notification.Name("cloudSyncCompleted")
+
+    /// Posted when user manually triggers sync
+    static let forceCloudSync = Notification.Name("forceCloudSync")
 }

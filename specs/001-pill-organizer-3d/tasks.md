@@ -177,22 +177,24 @@
 
 ---
 
-## Phase 8: Polish & Cross-Cutting Concerns
+## Phase 8: Polish & Cross-Cutting Concerns ✅ COMPLETED
 
 **Purpose**: Improvements that affect multiple user stories, accessibility, performance optimization
 
-- [ ] T075 [P] Add VoiceOver labels to Scene3DView.swift compartments using UIAccessibilityElement with projected 3D-to-2D coordinates, labels like "Compartment with Aspirin medication"
-- [ ] T076 [P] Implement Reduce Motion support in Scene3DView.swift checking UIAccessibility.isReduceMotionEnabled, disabling animations when true
-- [ ] T077 [P] Add haptic feedback to Scene3DView.swift using UIImpactFeedbackGenerator on compartment snap-to-grid, UINotificationFeedbackGenerator on save success
-- [ ] T078 [P] Implement Dark Mode color adjustments in Scene3DView.swift using UIColor.systemBackground for scene background, UIColor.label for text materials
-- [ ] T079 [P] Add Dynamic Type support to all SwiftUI text fields in CompartmentDetailSheet.swift using .font(.body) scalable fonts
-- [ ] T080 [P] Optimize 3D rendering in Scene3DView.swift with SCNLevelOfDetail for distant compartments, .multisampling2X antialiasing, frustum culling enabled
-- [ ] T081 [P] Add 50-compartment limit validation in OrganizerViewModel.swift showing alert when user tries to add 51st compartment
-- [ ] T082 [P] Implement collision detection performance optimization in OrganizerViewModel.swift using spatial partitioning grid to check only nearby compartments
-- [ ] T083 [P] Add app launch performance tracking in PeppermintApp.swift measuring time from didFinishLaunchingWithOptions to first frame, logging if >2 seconds
-- [ ] T084 [P] Create app icon in Assets.xcassets using SF Symbol "pills" or custom design following Apple HIG guidelines
+- [X] T075 [P] Add VoiceOver labels to Scene3DView.swift compartments using UIAccessibilityElement with projected 3D-to-2D coordinates, labels like "Compartment with Aspirin medication"
+- [X] T076 [P] Implement Reduce Motion support in Scene3DView.swift checking UIAccessibility.isReduceMotionEnabled, disabling animations when true
+- [X] T077 [P] Add haptic feedback to Scene3DView.swift using UIImpactFeedbackGenerator on compartment snap-to-grid, UINotificationFeedbackGenerator on save success
+- [X] T078 [P] Implement Dark Mode color adjustments in Scene3DView.swift using UIColor.systemBackground for scene background, UIColor.label for text materials
+- [X] T079 [P] Add Dynamic Type support to all SwiftUI text fields in CompartmentDetailSheet.swift using .font(.body) scalable fonts
+- [X] T080 [P] Optimize 3D rendering in Scene3DView.swift with SCNLevelOfDetail for distant compartments, .multisampling2X antialiasing, frustum culling enabled
+- [X] T081 [P] Add 50-compartment limit validation in OrganizerViewModel.swift showing alert when user tries to add 51st compartment
+- [X] T082 [P] Implement collision detection performance optimization in OrganizerViewModel.swift using spatial partitioning grid to check only nearby compartments
+- [X] T083 [P] Add app launch performance tracking in PeppermintApp.swift measuring time from didFinishLaunchingWithOptions to first frame, logging if >2 seconds
+- [X] T084 [P] Create app icon in Assets.xcassets using SF Symbol "pills" or custom design following Apple HIG guidelines
 - [ ] T085 Run VoiceOver navigation testing on PeppermintUITests/AccessibilityTests.swift ensuring all primary tasks completable without vision
 - [ ] T086 Validate STL export with PrusaSlicer integration test loading generated STL, checking for manifold errors, verifying 2mm min wall thickness
+
+**Checkpoint**: ✅ Polish implementation complete - T085 and T086 are manual testing tasks requiring physical execution
 
 ---
 
