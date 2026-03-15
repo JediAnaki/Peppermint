@@ -37,7 +37,7 @@ enum APIError: Error, LocalizedError {
 // MARK: - Request/Response Models
 
 /// Compartment geometry data sent to OpenSCAD server
-struct CompartmentGeometry: Codable {
+struct OpenSCADCompartmentData: Codable {
     let id: String
     let width: Float
     let height: Float
@@ -51,7 +51,7 @@ struct CompartmentGeometry: Codable {
 /// Request payload for OpenSCAD STL generation
 struct OpenSCADRequest: Codable {
     let organizerId: String
-    let compartments: [CompartmentGeometry]
+    let compartments: [OpenSCADCompartmentData]
     let options: GenerationOptions
 
     struct GenerationOptions: Codable {
@@ -102,7 +102,7 @@ final class OpenSCADAPIService {
 
     /// Base URL for OpenSCAD server (from ServerConfig)
     private var baseURL: URL {
-        return ServerConfig.openSCADServerURL
+        return ServerConfig.openSCADBaseURL
     }
 
     /// URLSession with 30-second timeout
@@ -189,12 +189,12 @@ final class OpenSCADAPIService {
 
     // MARK: - Helper Methods
 
-    /// Converts OrganizerDesign to array of CompartmentGeometry for API request
-    private func convertToGeometry(organizer: OrganizerDesign) -> [CompartmentGeometry] {
+    /// Converts OrganizerDesign to array of OpenSCADCompartmentData for API request
+    private func convertToGeometry(organizer: OrganizerDesign) -> [OpenSCADCompartmentData] {
         let compartmentsSet = organizer.compartments as? Set<Compartment> ?? []
 
         return compartmentsSet.map { compartment in
-            CompartmentGeometry(
+            OpenSCADCompartmentData(
                 id: compartment.id!.uuidString,
                 width: compartment.width,
                 height: compartment.height,

@@ -38,6 +38,11 @@
 		C6B7B4ED2F66B61000731350 /* PreviewCache+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6B7B4EA2F66B61000731350 /* PreviewCache+Extensions.swift */; };
 		C6B7B4F02F66B84100731350 /* OrganizerDesign+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6B7B4EF2F66B84100731350 /* OrganizerDesign+Helpers.swift */; };
 		C6B7B4F12F66B84100731350 /* Medication+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6B7B4EE2F66B84100731350 /* Medication+Helpers.swift */; };
+		C6B7B4F42F66BDBF00731350 /* OpenSCADAPIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6B7B4F22F66BDBF00731350 /* OpenSCADAPIService.swift */; };
+		C6B7B4F52F66BDBF00731350 /* PreviewCacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6B7B4F32F66BDBF00731350 /* PreviewCacheService.swift */; };
+		C6B7B4F72F66BDD100731350 /* STLLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6B7B4F62F66BDD100731350 /* STLLoader.swift */; };
+		C6B7B4F92F66BDE000731350 /* ExportPreviewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6B7B4F82F66BDE000731350 /* ExportPreviewViewModel.swift */; };
+		C6B7B4FC2F66BE1B00731350 /* ExportPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6B7B4FA2F66BE1B00731350 /* ExportPreviewView.swift */; };
 		E45ACE249D35686DE8A454CA /* OrganizerLibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0E3B3B8967543CFA1C26679 /* OrganizerLibraryView.swift */; };
 		EE05853A7616E4679A5CD793 /* PeppermintApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64B3450C3C805CB2DD1B5EB6 /* PeppermintApp.swift */; };
 /* End PBXBuildFile section */
@@ -93,6 +98,11 @@
 		C6B7B4EB2F66B61000731350 /* SyncConflict+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SyncConflict+Extensions.swift"; sourceTree = "<group>"; };
 		C6B7B4EE2F66B84100731350 /* Medication+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Medication+Helpers.swift"; sourceTree = "<group>"; };
 		C6B7B4EF2F66B84100731350 /* OrganizerDesign+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OrganizerDesign+Helpers.swift"; sourceTree = "<group>"; };
+		C6B7B4F22F66BDBF00731350 /* OpenSCADAPIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenSCADAPIService.swift; sourceTree = "<group>"; };
+		C6B7B4F32F66BDBF00731350 /* PreviewCacheService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewCacheService.swift; sourceTree = "<group>"; };
+		C6B7B4F62F66BDD100731350 /* STLLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STLLoader.swift; sourceTree = "<group>"; };
+		C6B7B4F82F66BDE000731350 /* ExportPreviewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportPreviewViewModel.swift; sourceTree = "<group>"; };
+		C6B7B4FA2F66BE1B00731350 /* ExportPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportPreviewView.swift; sourceTree = "<group>"; };
 		D56FDEA7466ED07B54A6E03A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D8A7796E0A84011585268E44 /* DataPersistenceService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataPersistenceService.swift; sourceTree = "<group>"; };
 		E0E3B3B8967543CFA1C26679 /* OrganizerLibraryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrganizerLibraryView.swift; sourceTree = "<group>"; };
@@ -161,6 +171,7 @@
 		5D08337290A351C1C3BABECD /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				C6B7B4F82F66BDE000731350 /* ExportPreviewViewModel.swift */,
 				E4FD866CD5381ED192ADEC8F /* MedicationViewModel.swift */,
 				BA7E75FA6C3C57FE5812BCFC /* OrganizerViewModel.swift */,
 				4660263D3D1313CC053A9E41 /* ReminderViewModel.swift */,
@@ -171,6 +182,7 @@
 		70648B482BC8A3AA53462901 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				C6B7B4FB2F66BE1B00731350 /* Export */,
 				56EB7A951BDCF13E6CA32222 /* Constructor */,
 				AF3FF4FAC9D4FC7B69FE89F9 /* Library */,
 			);
@@ -220,6 +232,7 @@
 		C6B7B4DC2F66A62D00731350 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				C6B7B4F62F66BDD100731350 /* STLLoader.swift */,
 				C6B7B4D82F66A62D00731350 /* AccessibilityHelper.swift */,
 				C6B7B4D92F66A62D00731350 /* BiometricAuthManager.swift */,
 				C6B7B4DA2F66A62D00731350 /* KeychainHelper.swift */,
@@ -228,9 +241,19 @@
 			path = Utilities;
 			sourceTree = "<group>";
 		};
+		C6B7B4FB2F66BE1B00731350 /* Export */ = {
+			isa = PBXGroup;
+			children = (
+				C6B7B4FA2F66BE1B00731350 /* ExportPreviewView.swift */,
+			);
+			path = Export;
+			sourceTree = "<group>";
+		};
 		D0113D81F5B470DDCB01DD88 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				C6B7B4F22F66BDBF00731350 /* OpenSCADAPIService.swift */,
+				C6B7B4F32F66BDBF00731350 /* PreviewCacheService.swift */,
 				D8A7796E0A84011585268E44 /* DataPersistenceService.swift */,
 				4FC90A95E7AA53F30F139B1C /* FrictionFitGenerator.swift */,
 				4829838B6950042B5A826A77 /* NotificationService.swift */,
@@ -389,8 +412,12 @@
 				2177EBA9342C155A37C71DAD /* ContentView.swift in Sources */,
 				7082757334A04B31880D4CE3 /* DataPersistenceService.swift in Sources */,
 				29E935329243511E7F404814 /* ExportHistory+CoreDataClass.swift in Sources */,
+				C6B7B4F72F66BDD100731350 /* STLLoader.swift in Sources */,
 				17B9088DEAEA1865021F317E /* ExportHistory+CoreDataProperties.swift in Sources */,
 				C6B7B4DD2F66A62D00731350 /* BiometricAuthManager.swift in Sources */,
+				C6B7B4F42F66BDBF00731350 /* OpenSCADAPIService.swift in Sources */,
+				C6B7B4FC2F66BE1B00731350 /* ExportPreviewView.swift in Sources */,
+				C6B7B4F52F66BDBF00731350 /* PreviewCacheService.swift in Sources */,
 				C6B7B4E82F66B35D00731350 /* OrganizerDesign+CloudSync.swift in Sources */,
 				C6B7B4DE2F66A62D00731350 /* ServerConfig.swift in Sources */,
 				C6B7B4EC2F66B61000731350 /* SyncConflict+Extensions.swift in Sources */,
@@ -405,6 +432,7 @@
 				433D337490096AD9EB373446 /* OrganizerViewModel.swift in Sources */,
 				EE05853A7616E4679A5CD793 /* PeppermintApp.swift in Sources */,
 				7333075F883F2BFC45903DF4 /* PeppermintDataModel.xcdatamodeld in Sources */,
+				C6B7B4F92F66BDE000731350 /* ExportPreviewViewModel.swift in Sources */,
 				272C769DB6746AC865DF5EF8 /* ReminderSchedule+CoreDataClass.swift in Sources */,
 				8793F59F5D7657CF5BEA9773 /* ReminderSchedule+CoreDataProperties.swift in Sources */,
 				A6B9D7667F022D858423593F /* ReminderViewModel.swift in Sources */,

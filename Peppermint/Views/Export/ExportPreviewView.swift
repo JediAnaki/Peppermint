@@ -214,5 +214,5 @@ struct SceneKitPreviewView: UIViewRepresentable {
     organizer.createdAt = Date()
     organizer.modifiedAt = Date()
 
-    return ExportPreviewView(organizer: organizer)
+    ExportPreviewView(organizer: organizer)
 }
