@@ -50,7 +50,7 @@ extension PreviewCache {
             hashInput += "\(compartment.positionX),\(compartment.positionY),\(compartment.positionZ),"
 
             // Color (affects STL visualization but not geometry - include for consistency)
-            hashInput += "\(compartment.colorHex),"
+            hashInput += "\(compartment.colorHex ?? "#CCCCCC"),"
 
             // For pill visualization, include medication data in hash
             if includePills, let medication = compartment.medication {

@@ -207,7 +207,7 @@ struct SceneKitPreviewView: UIViewRepresentable {
 
 #Preview {
     // Mock organizer for preview
-    let context = DataPersistenceService.preview.container.viewContext
+    let context = DataPersistenceService.preview.viewContext
     let organizer = OrganizerDesign(context: context)
     organizer.id = UUID()
     organizer.name = "Sample Organizer"

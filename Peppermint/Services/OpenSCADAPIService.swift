@@ -202,7 +202,7 @@ final class OpenSCADAPIService {
                 positionX: compartment.positionX,
                 positionY: compartment.positionY,
                 positionZ: compartment.positionZ,
-                colorHex: compartment.colorHex
+                colorHex: compartment.colorHex ?? "#CCCCCC"
             )
         }
     }
