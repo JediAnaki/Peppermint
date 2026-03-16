@@ -222,28 +222,28 @@ iOS project structure: `Peppermint/` (app), `PeppermintTests/` (tests)
 
 **Medication Entity Extensions**:
 
-- [ ] T092 [P] [US4] Extend Medication entity in Peppermint 3.xcdatamodel with pillShape (String, default "round"), pillDiameter (Float, default 8.0), pillLength (Float, default 8.0)
-- [ ] T093 [US4] Create Peppermint/Models/Medication+Visualization.swift extension with shouldVisualize computed property (checks name not empty)
-- [ ] T094 [US4] Implement PillGeometry codable struct in Medication extension (shape, diameter, length) for OpenSCAD API
+- [X] T092 [P] [US4] Extend Medication entity in Peppermint 3.xcdatamodel with pillShape (String, default "round"), pillDiameter (Float, default 8.0), pillLength (Float, default 8.0)
+- [X] T093 [US4] Create Peppermint/Models/Medication+Visualization.swift extension with shouldVisualize computed property (checks name not empty)
+- [X] T094 [US4] Implement PillGeometry codable struct in Medication extension (shape, diameter, length) for OpenSCAD API
 
 **OpenSCAD API Pill Visualization**:
 
-- [ ] T095 [P] [US4] Update OpenSCADAPIService.generateSTL() to include medication geometry when includePills=true
-- [ ] T096 [US4] Modify CompartmentGeometry struct adding optional medication property (MedicationGeometry)
-- [ ] T097 [US4] Only populate medication field when compartment.medication.shouldVisualize == true (FR-017: medication.name filled)
-- [ ] T098 [US4] Send pillShape, pillDiameter, pillLength to server for round/oblong/capsule/oval rendering
+- [X] T095 [P] [US4] Update OpenSCADAPIService.generateSTL() to include medication geometry when includePills=true
+- [X] T096 [US4] Modify CompartmentGeometry struct adding optional medication property (MedicationGeometry)
+- [X] T097 [US4] Only populate medication field when compartment.medication.shouldVisualize == true (FR-017: medication.name filled)
+- [X] T098 [US4] Send pillShape, pillDiameter, pillLength to server for round/oblong/capsule/oval rendering
 
 **Preview Toggle UI**:
 
-- [ ] T099 [P] [US4] Add @Published var showPillsInPreview = false to ExportPreviewViewModel
-- [ ] T100 [US4] Implement togglePillVisualization() method reloading STL with updated includePills parameter
-- [ ] T101 [US4] Add Toggle("Show Pills", isOn: $viewModel.showPillsInPreview) to ExportPreviewView toolbar with .onChange handler
-- [ ] T102 [US4] Ensure export always uses includePills: false in confirmExport() (FR-019: pills excluded from export STL)
+- [X] T099 [P] [US4] Add @Published var showPillsInPreview = false to ExportPreviewViewModel
+- [X] T100 [US4] Implement togglePillVisualization() method reloading STL with updated includePills parameter
+- [X] T101 [US4] Add Toggle("Show Pills", isOn: $viewModel.showPillsInPreview) to ExportPreviewView toolbar with .onChange handler
+- [X] T102 [US4] Ensure export always uses includePills: false in confirmExport() (FR-019: pills excluded from export STL)
 
 **Cache Key Pill Support**:
 
-- [ ] T103 [US4] Update PreviewCache.generateCacheKey() to include medication.name, pillShape, pillDiameter, pillLength when includePills=true
-- [ ] T104 [US4] Ensure separate cache entries for preview-with-pills vs export-without-pills (different cacheKey values)
+- [X] T103 [US4] Update PreviewCache.generateCacheKey() to include medication.name, pillShape, pillDiameter, pillLength when includePills=true
+- [X] T104 [US4] Ensure separate cache entries for preview-with-pills vs export-without-pills (different cacheKey values)
 
 **Checkpoint**: At this point, User Story 4 should work independently - users can toggle pill visualization in preview, pills appear only when medication.name filled, export STL remains clean
 

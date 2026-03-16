@@ -22,6 +22,9 @@ final class ExportPreviewViewModel: ObservableObject {
     @Published var previewNode: SCNNode?
     @Published var error: String?
 
+    // T099: Pill visualization toggle for preview (P4 - User Story 4)
+    @Published var showPillsInPreview = false
+
     // MARK: - Dependencies
 
     private let openSCADAPI = OpenSCADAPIService.shared
@@ -251,6 +254,34 @@ final class ExportPreviewViewModel: ObservableObject {
         } catch {
             self.error = "Export failed: \(error.localizedDescription)"
             print("❌ Local export failed: \(error)")
+        }
+    }
+
+    // MARK: - Pill Visualization Toggle (T100 - User Story 4)
+
+    /// T100: Toggles pill visualization in preview
+    ///
+    /// **Behavior**:
+    /// - Reloads STL with updated `includePills` parameter
+    /// - Uses separate cache entries for with-pills vs without-pills
+    /// - Pills appear ONLY when medication.name is filled (FR-017)
+    ///
+    /// **Note**: Export STL always excludes pills (FR-019) - see confirmExport()
+    func togglePillVisualization() {
+        guard let organizer = currentOrganizer else {
+            print("⚠️ No organizer loaded for pill toggle")
+            return
+        }
+
+        print("🔄 Toggling pill visualization: \(showPillsInPreview ? "ON" : "OFF")")
+
+        // Reload preview with updated includePills parameter
+        isLoading = true
+        error = nil
+        previewNode = nil
+
+        Task {
+            await loadSTL(for: organizer, includePills: showPillsInPreview)
         }
     }
 }

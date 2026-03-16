@@ -58,6 +58,17 @@ struct ExportPreviewView: View {
                     .accessibilityLabel("Cancel preview")
                 }
 
+                // T101: Pill visualization toggle (P4 - User Story 4)
+                ToolbarItem(placement: .bottomBar) {
+                    Toggle("Show Pills", isOn: $viewModel.showPillsInPreview)
+                        .onChange(of: viewModel.showPillsInPreview) { _ in
+                            viewModel.togglePillVisualization()
+                        }
+                        .toggleStyle(.switch)
+                        .accessibilityLabel("Show pill visualization")
+                        .accessibilityHint("Displays pill shapes inside compartments in preview only")
+                }
+
                 // Export STL button
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Export STL") {

@@ -46,6 +46,17 @@ struct OpenSCADCompartmentData: Codable {
     let positionY: Float
     let positionZ: Float
     let colorHex: String
+
+    // T096: Optional medication geometry for pill visualization (P4)
+    let medication: MedicationGeometry?
+}
+
+/// T096: Medication geometry for pill rendering in OpenSCAD
+struct MedicationGeometry: Codable {
+    let pillShape: String       // "round", "oblong", "capsule", "oval"
+    let pillDiameter: Float     // mm
+    let pillLength: Float       // mm
+    let pillCount: Int          // Number of pills to render in compartment
 }
 
 /// Request payload for OpenSCAD STL generation
@@ -131,8 +142,8 @@ final class OpenSCADAPIService {
     ///
     /// - Throws: `APIError` if request fails or response invalid
     func generateSTL(organizer: OrganizerDesign, includePills: Bool = false) async throws -> (Data, Int) {
-        // Build request payload
-        let compartments = convertToGeometry(organizer: organizer)
+        // T095: Build request payload with pill visualization support
+        let compartments = convertToGeometry(organizer: organizer, includePills: includePills)
         let options = OpenSCADRequest.GenerationOptions(includePills: includePills)
         let request = OpenSCADRequest(
             organizerId: organizer.id!.uuidString,
@@ -189,12 +200,31 @@ final class OpenSCADAPIService {
 
     // MARK: - Helper Methods
 
-    /// Converts OrganizerDesign to array of OpenSCADCompartmentData for API request
-    private func convertToGeometry(organizer: OrganizerDesign) -> [OpenSCADCompartmentData] {
+    /// T097-T098: Converts OrganizerDesign to array of OpenSCADCompartmentData for API request
+    ///
+    /// - Parameters:
+    ///   - organizer: The organizer to convert
+    ///   - includePills: Whether to include medication pill geometry (default: false)
+    ///
+    /// - Returns: Array of compartment data with optional medication geometry
+    private func convertToGeometry(organizer: OrganizerDesign, includePills: Bool = false) -> [OpenSCADCompartmentData] {
         let compartmentsSet = organizer.compartments as? Set<Compartment> ?? []
 
         return compartmentsSet.map { compartment in
-            OpenSCADCompartmentData(
+            // T097: Only populate medication when shouldVisualize == true (FR-017: medication.name filled)
+            var medicationGeometry: MedicationGeometry? = nil
+
+            if includePills, let medication = compartment.medication, medication.shouldVisualize {
+                // T098: Send pillShape, pillDiameter, pillLength to server
+                medicationGeometry = MedicationGeometry(
+                    pillShape: medication.pillShape ?? "round",
+                    pillDiameter: medication.pillDiameter,
+                    pillLength: medication.pillLength,
+                    pillCount: calculatePillCount(compartment: compartment)
+                )
+            }
+
+            return OpenSCADCompartmentData(
                 id: compartment.id!.uuidString,
                 width: compartment.width,
                 height: compartment.height,
@@ -202,8 +232,30 @@ final class OpenSCADAPIService {
                 positionX: compartment.positionX,
                 positionY: compartment.positionY,
                 positionZ: compartment.positionZ,
-                colorHex: compartment.colorHex ?? "#CCCCCC"
+                colorHex: compartment.colorHex ?? "#CCCCCC",
+                medication: medicationGeometry
             )
+        }
+    }
+
+    /// Calculates reasonable number of pills to render in compartment
+    ///
+    /// **Logic**: Based on compartment volume and pill diameter
+    /// - Small compartments (< 1000mm³): 1-3 pills
+    /// - Medium compartments (1000-5000mm³): 4-8 pills
+    /// - Large compartments (> 5000mm³): 9-15 pills
+    ///
+    /// - Parameter compartment: The compartment to calculate for
+    /// - Returns: Number of pills to render (1-15)
+    private func calculatePillCount(compartment: Compartment) -> Int {
+        let volume = compartment.width * compartment.height * compartment.depth
+
+        if volume < 1000 {
+            return 2  // Small compartment
+        } else if volume < 5000 {
+            return 5  // Medium compartment
+        } else {
+            return 8  // Large compartment
         }
     }
 }
