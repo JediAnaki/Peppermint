@@ -109,6 +109,37 @@ final class OpenSCADAPIService {
 
     private init() {}
 
+    // MARK: - T105: Error Analytics
+
+    /// Tracks server failure count for monitoring fallback usage
+    private var serverFailureCount: Int {
+        get { UserDefaults.standard.integer(forKey: "openSCADServerFailureCount") }
+        set { UserDefaults.standard.set(newValue, forKey: "openSCADServerFailureCount") }
+    }
+
+    /// Tracks total request count for success rate calculation
+    private var totalRequestCount: Int {
+        get { UserDefaults.standard.integer(forKey: "openSCADTotalRequestCount") }
+        set { UserDefaults.standard.set(newValue, forKey: "openSCADTotalRequestCount") }
+    }
+
+    /// Returns server success rate (0.0 to 1.0)
+    var serverSuccessRate: Double {
+        guard totalRequestCount > 0 else { return 0.0 }
+        return Double(totalRequestCount - serverFailureCount) / Double(totalRequestCount)
+    }
+
+    /// Logs analytics for server failure
+    private func logServerFailure() {
+        serverFailureCount += 1
+        print("📊 Server failure #\(serverFailureCount) of \(totalRequestCount) requests (success rate: \(String(format: "%.1f%%", serverSuccessRate * 100)))")
+    }
+
+    /// Logs analytics for server success
+    private func logServerSuccess() {
+        print("📊 Server success (\(String(format: "%.1f%%", serverSuccessRate * 100)) success rate over \(totalRequestCount) requests)")
+    }
+
     // MARK: - Configuration
 
     /// Base URL for OpenSCAD server (from ServerConfig)
@@ -142,6 +173,46 @@ final class OpenSCADAPIService {
     ///
     /// - Throws: `APIError` if request fails or response invalid
     func generateSTL(organizer: OrganizerDesign, includePills: Bool = false) async throws -> (Data, Int) {
+        // T106: Increment total request count for analytics
+        totalRequestCount += 1
+
+        // T106: Retry with exponential backoff (1s, 2s, 4s max 3 attempts)
+        let maxAttempts = 3
+        var lastError: Error?
+
+        for attempt in 1...maxAttempts {
+            do {
+                let result = try await attemptGenerateSTL(organizer: organizer, includePills: includePills, attempt: attempt)
+
+                // T105: Log success
+                logServerSuccess()
+
+                return result
+
+            } catch {
+                lastError = error
+
+                // Don't retry on final attempt
+                guard attempt < maxAttempts else { break }
+
+                // T106: Exponential backoff (1s, 2s, 4s)
+                let delaySeconds = pow(2.0, Double(attempt - 1))
+                print("⚠️ Attempt \(attempt) failed: \(error.localizedDescription)")
+                print("   Retrying in \(Int(delaySeconds))s...")
+
+                try await Task.sleep(nanoseconds: UInt64(delaySeconds * 1_000_000_000))
+            }
+        }
+
+        // T105: Log failure after all retries exhausted
+        logServerFailure()
+
+        // All retries failed - throw last error
+        throw lastError ?? APIError.serverError("Unknown error")
+    }
+
+    /// T106: Single attempt to generate STL (used by retry logic)
+    private func attemptGenerateSTL(organizer: OrganizerDesign, includePills: Bool, attempt: Int) async throws -> (Data, Int) {
         // T095: Build request payload with pill visualization support
         let compartments = convertToGeometry(organizer: organizer, includePills: includePills)
         let options = OpenSCADRequest.GenerationOptions(includePills: includePills)
@@ -158,7 +229,7 @@ final class OpenSCADAPIService {
         urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
         urlRequest.httpBody = try JSONEncoder().encode(request)
 
-        print("📡 Sending STL generation request to OpenSCAD server...")
+        print("📡 Sending STL generation request to OpenSCAD server (attempt \(attempt)/3)...")
         print("   URL: \(endpoint)")
         print("   Compartments: \(compartments.count)")
         print("   Include pills: \(includePills)")

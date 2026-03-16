@@ -253,8 +253,8 @@ iOS project structure: `Peppermint/` (app), `PeppermintTests/` (tests)
 
 **Purpose**: Improvements that affect multiple user stories and final quality checks
 
-- [ ] T105 [P] Add error analytics tracking for OpenSCAD server failures (count fallback usage for monitoring)
-- [ ] T106 [P] Implement retry logic with exponential backoff (1s, 2s, 4s max 3 attempts) in OpenSCADAPIService before fallback
+- [X] T105 [P] Add error analytics tracking for OpenSCAD server failures (count fallback usage for monitoring)
+- [X] T106 [P] Implement retry logic with exponential backoff (1s, 2s, 4s max 3 attempts) in OpenSCADAPIService before fallback
 - [ ] T107 [P] Add CloudKit debugging logs: Edit Scheme → Run → Arguments → `-com.apple.CoreData.CloudKitDebug 1`
 - [ ] T108 Verify manifold validation: Test exported STL files in PrusaSlicer for 100% manifold success rate (SC-016)
 - [ ] T109 Performance test: Measure preview load time <2 seconds for 15-compartment organizer (SC-002)
