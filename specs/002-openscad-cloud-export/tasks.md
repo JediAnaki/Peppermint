@@ -177,36 +177,36 @@ iOS project structure: `Peppermint/` (app), `PeppermintTests/` (tests)
 
 **Cloud Sync Service (Conflict Detection)**:
 
-- [ ] T071 [P] [US3] Create Peppermint/Services/CloudSyncService.swift as ObservableObject with @Published syncStatus and conflictDetected
-- [ ] T072 [US3] Implement setupConflictObserver() adding NotificationCenter observer for .NSPersistentStoreRemoteChange
-- [ ] T073 [US3] Implement handlePersistentHistoryChange(_:) fetching NSPersistentHistoryChangeRequest after lastHistoryToken
-- [ ] T074 [US3] Detect conflicts by checking if remote update (.update changeType) matches local hasChanges on same objectID
-- [ ] T075 [US3] Set conflictDetected=true and syncStatus=.conflict when conflict found, creating SyncConflict entity
-- [ ] T076 [US3] Implement hasLocalChanges(for:) checking object.hasChanges on NSManagedObjectContext
-- [ ] T077 [US3] Store lastHistoryToken (NSPersistentHistoryToken) for incremental conflict checking
+- [X] T071 [P] [US3] Create Peppermint/Services/CloudSyncService.swift as ObservableObject with @Published syncStatus and conflictDetected
+- [X] T072 [US3] Implement setupConflictObserver() adding NotificationCenter observer for .NSPersistentStoreRemoteChange
+- [X] T073 [US3] Implement handlePersistentHistoryChange(_:) fetching NSPersistentHistoryChangeRequest after lastHistoryToken
+- [X] T074 [US3] Detect conflicts by checking if remote update (.update changeType) matches local hasChanges on same objectID
+- [X] T075 [US3] Set conflictDetected=true and syncStatus=.conflict when conflict found, creating SyncConflict entity
+- [X] T076 [US3] Implement hasLocalChanges(for:) checking object.hasChanges on NSManagedObjectContext
+- [X] T077 [US3] Store lastHistoryToken (NSPersistentHistoryToken) for incremental conflict checking
 
 **Conflict Resolution Strategies**:
 
-- [ ] T078 [P] [US3] Implement ResolutionStrategy enum in SyncConflict+CoreDataClass.swift (keepLocal, keepRemote, merge)
-- [ ] T079 [US3] Implement resolve(strategy:in:) method in SyncConflict extension applying selected strategy
-- [ ] T080 [US3] Handle .keepLocal: set organizer.syncStatus = .pending and increment conflictVersion forcing CloudKit push
-- [ ] T081 [US3] Handle .keepRemote: decode remoteVersionData JSON and apply to local organizer with syncStatus = .synced
-- [ ] T082 [US3] Handle .merge: rely on NSMergeByPropertyObjectTrumpMergePolicy (already configured) for property-level last-write-wins
-- [ ] T083 [US3] Mark conflict resolved=true with resolutionStrategy and resolvedAt timestamp after applying
+- [X] T078 [P] [US3] Implement ResolutionStrategy enum in SyncConflict+CoreDataClass.swift (keepLocal, keepRemote, merge)
+- [X] T079 [US3] Implement resolve(strategy:in:) method in SyncConflict extension applying selected strategy
+- [X] T080 [US3] Handle .keepLocal: set organizer.syncStatus = .pending and increment conflictVersion forcing CloudKit push
+- [X] T081 [US3] Handle .keepRemote: decode remoteVersionData JSON and apply to local organizer with syncStatus = .synced
+- [X] T082 [US3] Handle .merge: rely on NSMergeByPropertyObjectTrumpMergePolicy (already configured) for property-level last-write-wins
+- [X] T083 [US3] Mark conflict resolved=true with resolutionStrategy and resolvedAt timestamp after applying
 
 **Conflict Resolution UI**:
 
-- [ ] T084 [P] [US3] Add @StateObject private var syncService = CloudSyncService() to OrganizerLibraryView (or main organizer list view)
-- [ ] T085 [US3] Call syncService.setupConflictObserver() in .onAppear modifier
-- [ ] T086 [US3] Add .alert("Sync Conflict Detected", isPresented: $syncService.conflictDetected) with 3 action buttons
-- [ ] T087 [US3] Wire "Keep This Device's Changes" button to syncService.resolveConflict(strategy: .keepLocal)
-- [ ] T088 [US3] Wire "Use iCloud Version" button to syncService.resolveConflict(strategy: .keepRemote)
-- [ ] T089 [US3] Wire "Merge (Recommended)" button to syncService.resolveConflict(strategy: .merge) with cancel role
+- [X] T084 [P] [US3] Add @StateObject private var syncService = CloudSyncService() to OrganizerLibraryView (or main organizer list view)
+- [X] T085 [US3] Call syncService.setupConflictObserver() in .onAppear modifier
+- [X] T086 [US3] Add .alert("Sync Conflict Detected", isPresented: $syncService.conflictDetected) with 3 action buttons
+- [X] T087 [US3] Wire "Keep This Device's Changes" button to syncService.resolveConflict(strategy: .keepLocal)
+- [X] T088 [US3] Wire "Use iCloud Version" button to syncService.resolveConflict(strategy: .keepRemote)
+- [X] T089 [US3] Wire "Merge (Recommended)" button to syncService.resolveConflict(strategy: .merge) with cancel role
 
 **Multi-Device Sync Indicators**:
 
-- [ ] T090 [US3] Add real-time sync status updates by observing .cloudSyncCompleted notification in organizer list
-- [ ] T091 [US3] Refresh organizer list UI when remote changes detected (fetch updated data from viewContext)
+- [X] T090 [US3] Add real-time sync status updates by observing .cloudSyncCompleted notification in organizer list
+- [X] T091 [US3] Refresh organizer list UI when remote changes detected (fetch updated data from viewContext)
 
 **Checkpoint**: At this point, User Story 3 should work independently - users can edit on multiple devices, conflicts are detected and resolved, property-level merge preserves data
 

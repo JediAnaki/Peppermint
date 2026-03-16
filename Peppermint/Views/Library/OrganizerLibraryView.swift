@@ -39,6 +39,7 @@ struct OrganizerLibraryView: View {
 
     @StateObject private var viewModel = OrganizerViewModel()
     @StateObject private var medicationViewModel = MedicationViewModel()
+    @StateObject private var syncService = CloudSyncService()
 
     // MARK: - Body
 
@@ -93,6 +94,15 @@ struct OrganizerLibraryView: View {
             .sheet(isPresented: $showingSettings) {
                 SettingsView()
             }
+            // T085: Setup conflict observer when view appears
+            .onAppear {
+                syncService.setupConflictObserver()
+            }
+            // T090: Real-time sync status updates
+            .onReceive(NotificationCenter.default.publisher(for: .cloudSyncCompleted)) { _ in
+                // T091: Refresh organizer list UI when remote changes detected
+                viewContext.refreshAllObjects()
+            }
             .alert("Delete Organizer", isPresented: $showingDeleteConfirmation) {
                 Button("Cancel", role: .cancel) {
                     organizerToDelete = nil
@@ -118,6 +128,27 @@ struct OrganizerLibraryView: View {
                 }
             } message: {
                 Text("Enter a new name for this organizer")
+            }
+            // T086-T089: Conflict resolution alert
+            .alert("Sync Conflict Detected", isPresented: $syncService.conflictDetected) {
+                // T087: Keep this device's changes
+                Button("Keep This Device's Changes") {
+                    syncService.resolveConflict(strategy: .keepLocal)
+                }
+                // T088: Use iCloud version
+                Button("Use iCloud Version") {
+                    syncService.resolveConflict(strategy: .keepRemote)
+                }
+                // T089: Merge (recommended)
+                Button("Merge (Recommended)", role: .cancel) {
+                    syncService.resolveConflict(strategy: .merge)
+                }
+            } message: {
+                if let conflict = syncService.currentConflict {
+                    Text(conflict.comparisonDescription)
+                } else {
+                    Text("This organizer was modified on another device. Choose how to resolve the conflict.")
+                }
             }
         }
     }
