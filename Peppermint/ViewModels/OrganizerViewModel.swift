@@ -123,6 +123,12 @@ class OrganizerViewModel: ObservableObject {
 
         compartments.append(compartment)
 
+        // T069: Mark organizer for cloud sync when compartments are edited
+        organizer.modifiedAt = Date()
+        if organizer.cloudSyncEnabled {
+            organizer.markForSync()
+        }
+
         do {
             try persistenceService.viewContext.save()
         } catch {
@@ -245,6 +251,14 @@ class OrganizerViewModel: ObservableObject {
 
         if selectedCompartment?.id == compartment.id {
             selectedCompartment = nil
+        }
+
+        // T069: Mark organizer for cloud sync when compartments are edited
+        if let organizer = currentOrganizer {
+            organizer.modifiedAt = Date()
+            if organizer.cloudSyncEnabled {
+                organizer.markForSync()
+            }
         }
 
         do {

@@ -136,32 +136,32 @@ iOS project structure: `Peppermint/` (app), `PeppermintTests/` (tests)
 
 **Persistence Controller CloudKit Integration**:
 
-- [ ] T054 [P] [US2] Add enableCloudKit() method to PersistenceController.swift setting UserDefaults.cloudSyncEnabled = true
-- [ ] T055 [US2] Implement enableCloudKitContainer() configuring NSPersistentCloudKitContainerOptions with iCloud.com.peppermint.organizer
-- [ ] T056 [US2] Enable persistent history tracking (NSPersistentHistoryTrackingKey) and remote change notifications in CloudKit store description
-- [ ] T057 [US2] Implement handleRemoteChange(_:) selector posting .cloudSyncCompleted notification on main thread
-- [ ] T058 [US2] Add disableCloudKitContainer() setting cloudKitContainerOptions to nil for local-only mode
+- [X] T054 [P] [US2] Add enableCloudKit() method to PersistenceController.swift setting UserDefaults.cloudSyncEnabled = true
+- [X] T055 [US2] Implement enableCloudKitContainer() configuring NSPersistentCloudKitContainerOptions with iCloud.com.peppermint.organizer
+- [X] T056 [US2] Enable persistent history tracking (NSPersistentHistoryTrackingKey) and remote change notifications in CloudKit store description
+- [X] T057 [US2] Implement handleRemoteChange(_:) selector posting .cloudSyncCompleted notification on main thread
+- [X] T058 [US2] Add disableCloudKitContainer() setting cloudKitContainerOptions to nil for local-only mode
 
 **Cloud Backup Settings View**:
 
-- [ ] T059 [P] [US2] Create Peppermint/Views/Settings/CloudBackupSettingsView.swift with SwiftUI Form layout
-- [ ] T060 [US2] Add @AppStorage("cloudSyncEnabled") toggle with onChange handler checking iCloud availability
-- [ ] T061 [US2] Implement checkiCloudAvailability() using CKContainer.default().accountStatus with status handling
-- [ ] T062 [US2] Handle iCloud status cases: .available (enable sync), .noAccount/.restricted/.couldNotDetermine (show alert)
-- [ ] T063 [US2] Implement enableCloudSync() calling PersistenceController.enableCloudKit() and marking all existing organizers cloudSyncEnabled=true
-- [ ] T064 [US2] Implement disableCloudSync() setting all organizers cloudSyncEnabled=false without deleting cloud data
-- [ ] T065 [US2] Add sync status display: checkmark.circle.fill icon + "Enabled" text when cloudSyncEnabled is true
-- [ ] T066 [US2] Add "Sync Now" button posting .forceCloudSync notification when cloud backup enabled
-- [ ] T067 [US2] Implement lastSyncDate computed property fetching most recent OrganizerDesign.lastSyncedAt with RelativeDateTimeFormatter
+- [X] T059 [P] [US2] Create Peppermint/Views/Settings/CloudBackupSettingsView.swift with SwiftUI Form layout
+- [X] T060 [US2] Add @AppStorage("cloudSyncEnabled") toggle with onChange handler checking iCloud availability
+- [X] T061 [US2] Implement checkiCloudAvailability() using CKContainer.default().accountStatus with status handling
+- [X] T062 [US2] Handle iCloud status cases: .available (enable sync), .noAccount/.restricted/.couldNotDetermine (show alert)
+- [X] T063 [US2] Implement enableCloudSync() calling PersistenceController.enableCloudKit() and marking all existing organizers cloudSyncEnabled=true
+- [X] T064 [US2] Implement disableCloudSync() setting all organizers cloudSyncEnabled=false without deleting cloud data
+- [X] T065 [US2] Add sync status display: checkmark.circle.fill icon + "Enabled" text when cloudSyncEnabled is true
+- [X] T066 [US2] Add "Sync Now" button posting .forceCloudSync notification when cloud backup enabled
+- [X] T067 [US2] Implement lastSyncDate computed property fetching most recent OrganizerDesign.lastSyncedAt with RelativeDateTimeFormatter
 
 **Settings Integration**:
 
-- [ ] T068 [US2] Add NavigationLink to CloudBackupSettingsView in existing app settings (Settings tab or menu)
+- [X] T068 [US2] Add NavigationLink to CloudBackupSettingsView in existing app settings (Settings tab or menu)
 
 **Organizer Sync State Management**:
 
-- [ ] T069 [P] [US2] Update OrganizerViewModel to call organizer.markForSync() on compartment edits when cloudSyncEnabled=true
-- [ ] T070 [US2] Display sync status indicators in organizer library: synced (checkmark), syncing (progress spinner), offline (cloud.slash), error (exclamationmark.triangle)
+- [X] T069 [P] [US2] Update OrganizerViewModel to call organizer.markForSync() on compartment edits when cloudSyncEnabled=true
+- [X] T070 [US2] Display sync status indicators in organizer library: synced (checkmark), syncing (progress spinner), offline (cloud.slash), error (exclamationmark.triangle)
 
 **Checkpoint**: At this point, User Story 2 should work independently - users can enable/disable cloud backup, organizers sync to iCloud, local-only mode preserved
 

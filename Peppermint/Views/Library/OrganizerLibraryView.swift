@@ -35,6 +35,7 @@ struct OrganizerLibraryView: View {
     @State private var showingRenameAlert = false
     @State private var organizerToRename: OrganizerDesign?
     @State private var renameText = ""
+    @State private var showingSettings = false
 
     @StateObject private var viewModel = OrganizerViewModel()
     @StateObject private var medicationViewModel = MedicationViewModel()
@@ -53,8 +54,15 @@ struct OrganizerLibraryView: View {
             .navigationTitle("My Organizers")
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button(action: { showingFilterMenu = true }) {
-                        Image(systemName: filterCategory != nil || filterColor != nil ? "line.3.horizontal.decrease.circle.fill" : "line.3.horizontal.decrease.circle")
+                    HStack {
+                        // T068: Settings button
+                        Button(action: { showingSettings = true }) {
+                            Image(systemName: "gearshape")
+                        }
+
+                        Button(action: { showingFilterMenu = true }) {
+                            Image(systemName: filterCategory != nil || filterColor != nil ? "line.3.horizontal.decrease.circle.fill" : "line.3.horizontal.decrease.circle")
+                        }
                     }
                 }
 
@@ -81,6 +89,9 @@ struct OrganizerLibraryView: View {
             }
             .sheet(isPresented: $showingNewOrganizerSheet) {
                 newOrganizerSheet
+            }
+            .sheet(isPresented: $showingSettings) {
+                SettingsView()
             }
             .alert("Delete Organizer", isPresented: $showingDeleteConfirmation) {
                 Button("Cancel", role: .cancel) {
@@ -398,6 +409,11 @@ struct OrganizerThumbnailView: View {
 
                 Spacer()
 
+                // T070: Sync status indicators
+                if organizer.cloudSyncEnabled {
+                    syncStatusIndicator(for: organizer)
+                }
+
                 if let modifiedAt = organizer.modifiedAt {
                     Text(modifiedAt, style: .relative)
                         .font(.caption)
@@ -408,6 +424,33 @@ struct OrganizerThumbnailView: View {
         .padding(8)
         .background(Color(UIColor.secondarySystemBackground))
         .cornerRadius(12)
+    }
+
+    // T070: Sync status indicator
+    @ViewBuilder
+    private func syncStatusIndicator(for organizer: OrganizerDesign) -> some View {
+        let status = organizer.syncStatusEnum
+
+        switch status {
+        case .synced:
+            Image(systemName: "checkmark.icloud")
+                .font(.caption)
+                .foregroundColor(.green)
+        case .pending, .syncing:
+            Image(systemName: "arrow.triangle.2.circlepath.icloud")
+                .font(.caption)
+                .foregroundColor(.blue)
+        case .error:
+            Image(systemName: "exclamationmark.icloud")
+                .font(.caption)
+                .foregroundColor(.red)
+        case .conflict:
+            Image(systemName: "exclamationmark.triangle")
+                .font(.caption)
+                .foregroundColor(.orange)
+        case .local:
+            EmptyView()
+        }
     }
 }
 
