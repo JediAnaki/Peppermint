@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SceneKit
+import UIKit
 
 /// UIViewRepresentable wrapper for SCNView with gesture support for 3D organizer construction
 struct Scene3DView: UIViewRepresentable {
@@ -17,10 +18,14 @@ struct Scene3DView: UIViewRepresentable {
     @Binding var selectedCompartment: Compartment?
     var sceneViewRef: Binding<SCNView?>? = nil
 
+    // MARK: - Accessibility & Motion Settings
+
+    @Environment(\.accessibilityReduceMotion) var reduceMotion
+
     // MARK: - Coordinator
 
     func makeCoordinator() -> Coordinator {
-        Coordinator(parent: self)
+        Coordinator(parent: self, reduceMotion: reduceMotion)
     }
 
     // MARK: - UIViewRepresentable
@@ -71,9 +76,26 @@ struct Scene3DView: UIViewRepresentable {
         // Compartment nodes mapping
         private var compartmentNodes: [UUID: SCNNode] = [:]
 
-        init(parent: Scene3DView) {
+        // Accessibility elements for VoiceOver (T075)
+        private var customAccessibilityElements: [UIAccessibilityElement] = []
+
+        // Haptic feedback generators
+        private let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
+        private let selectionFeedback = UISelectionFeedbackGenerator()
+        private let notificationFeedback = UINotificationFeedbackGenerator()
+
+        // Reduce Motion setting
+        private var reduceMotion: Bool
+
+        init(parent: Scene3DView, reduceMotion: Bool) {
             self.parent = parent
+            self.reduceMotion = reduceMotion
             super.init()
+
+            // Prepare haptic generators
+            impactFeedback.prepare()
+            selectionFeedback.prepare()
+            notificationFeedback.prepare()
         }
 
         // MARK: - Gesture Setup
@@ -110,6 +132,7 @@ struct Scene3DView: UIViewRepresentable {
                 // Clear all compartments if no organizer
                 compartmentNodes.values.forEach { $0.removeFromParentNode() }
                 compartmentNodes.removeAll()
+                customAccessibilityElements.removeAll()
                 return
             }
 
@@ -141,6 +164,9 @@ struct Scene3DView: UIViewRepresentable {
 
             // Update selection highlights
             updateSelectionHighlights()
+
+            // Update accessibility elements for VoiceOver (T075)
+            updateAccessibilityElements(for: sceneView, compartments: currentCompartments)
         }
 
         /// Create a SceneKit node for a compartment with procedural geometry
@@ -164,6 +190,19 @@ struct Scene3DView: UIViewRepresentable {
                 compartment.positionY,
                 compartment.positionZ
             )
+
+            // T080: Add Level of Detail for performance optimization
+            // Use simpler geometry when compartment is far from camera
+            let simplifiedGeometry = SCNBox(
+                width: CGFloat(compartment.width),
+                height: CGFloat(compartment.height),
+                length: CGFloat(compartment.depth),
+                chamferRadius: 0
+            )
+            simplifiedGeometry.materials = [material]
+
+            let lod = SCNLevelOfDetail(geometry: simplifiedGeometry, screenSpaceRadius: 50)
+            node.geometry?.levelsOfDetail = [lod]
 
             // Store compartment ID in node name for hit testing
             node.name = compartment.id?.uuidString
@@ -217,10 +256,19 @@ struct Scene3DView: UIViewRepresentable {
             textNode.constraints = [billboardConstraint]
 
             // Add expiration warning indicator if needed
+            var xOffset: Float = -2.0
             if medication.isExpiringSoon || medication.isExpired {
                 let warningNode = createExpirationWarningIndicator(for: medication)
-                warningNode.position = SCNVector3(-2, 1, 0) // To the left of label
+                warningNode.position = SCNVector3(xOffset, 1, 0) // To the left of label
                 textNode.addChildNode(warningNode)
+                xOffset -= 2.5 // Move next indicator further left
+            }
+
+            // Add reminder indicator if active reminders exist
+            if medication.hasActiveReminders {
+                let reminderNode = createReminderIndicator()
+                reminderNode.position = SCNVector3(xOffset, 1, 0)
+                textNode.addChildNode(reminderNode)
             }
 
             return textNode
@@ -239,12 +287,65 @@ struct Scene3DView: UIViewRepresentable {
 
             let node = SCNNode(geometry: sphere)
 
-            // Add pulsing animation for attention
-            let scaleUp = SCNAction.scale(to: 1.2, duration: 0.5)
-            let scaleDown = SCNAction.scale(to: 1.0, duration: 0.5)
-            let pulse = SCNAction.sequence([scaleUp, scaleDown])
-            let repeatPulse = SCNAction.repeatForever(pulse)
-            node.runAction(repeatPulse)
+            // Add pulsing animation for attention (T076: respect Reduce Motion)
+            if !reduceMotion {
+                let scaleUp = SCNAction.scale(to: 1.2, duration: 0.5)
+                let scaleDown = SCNAction.scale(to: 1.0, duration: 0.5)
+                let pulse = SCNAction.sequence([scaleUp, scaleDown])
+                let repeatPulse = SCNAction.repeatForever(pulse)
+                node.runAction(repeatPulse)
+            }
+
+            return node
+        }
+
+        /// Create a visual indicator for active reminders (bell icon)
+        private func createReminderIndicator() -> SCNNode {
+            // Create a simplified bell shape using cylinders and a sphere
+            let node = SCNNode()
+
+            // Bell body (cone-like cylinder)
+            let bellBody = SCNCylinder(radius: 0.6, height: 1.0)
+            let bellMaterial = SCNMaterial()
+            bellMaterial.diffuse.contents = UIColor.systemBlue
+            bellMaterial.lightingModel = .constant
+            bellBody.materials = [bellMaterial]
+
+            let bellBodyNode = SCNNode(geometry: bellBody)
+            bellBodyNode.position = SCNVector3(0, 0, 0)
+
+            // Bell clapper (small sphere at bottom)
+            let clapper = SCNSphere(radius: 0.2)
+            clapper.materials = [bellMaterial]
+
+            let clapperNode = SCNNode(geometry: clapper)
+            clapperNode.position = SCNVector3(0, -0.6, 0)
+
+            // Badge (small red sphere for notification badge)
+            let badge = SCNSphere(radius: 0.3)
+            let badgeMaterial = SCNMaterial()
+            badgeMaterial.diffuse.contents = UIColor.systemRed
+            badgeMaterial.lightingModel = .constant
+            badge.materials = [badgeMaterial]
+
+            let badgeNode = SCNNode(geometry: badge)
+            badgeNode.position = SCNVector3(0.5, 0.5, 0)
+
+            // Assemble bell
+            node.addChildNode(bellBodyNode)
+            node.addChildNode(clapperNode)
+            node.addChildNode(badgeNode)
+
+            // Add subtle ringing animation (T076: respect Reduce Motion)
+            if !reduceMotion {
+                let rotateLeft = SCNAction.rotateBy(x: 0, y: 0, z: CGFloat.pi / 16, duration: 0.1)
+                let rotateRight = SCNAction.rotateBy(x: 0, y: 0, z: -CGFloat.pi / 8, duration: 0.2)
+                let rotateBack = SCNAction.rotateBy(x: 0, y: 0, z: CGFloat.pi / 16, duration: 0.1)
+                let wait = SCNAction.wait(duration: 2.0)
+                let ring = SCNAction.sequence([rotateLeft, rotateRight, rotateBack, wait])
+                let repeatRing = SCNAction.repeatForever(ring)
+                node.runAction(repeatRing)
+            }
 
             return node
         }
@@ -431,6 +532,60 @@ struct Scene3DView: UIViewRepresentable {
             }
         }
 
+        // MARK: - Accessibility (T075: VoiceOver Support)
+
+        /// Update accessibility elements for VoiceOver navigation
+        private func updateAccessibilityElements(for sceneView: SCNView, compartments: [Compartment]) {
+            customAccessibilityElements.removeAll()
+
+            for compartment in compartments {
+                guard let id = compartment.id,
+                      let node = compartmentNodes[id] else { continue }
+
+                // Create accessibility element for this compartment
+                let element = UIAccessibilityElement(accessibilityContainer: sceneView)
+
+                // Generate descriptive label
+                var label = "Compartment"
+                if let medication = compartment.medication {
+                    label += " with \(medication.name ?? "medication")"
+
+                    // Add expiration status
+                    if medication.isExpired {
+                        label += ", expired"
+                    } else if medication.isExpiringSoon {
+                        label += ", expiring soon"
+                    }
+
+                    // Add reminder status
+                    if medication.hasActiveReminders {
+                        label += ", has active reminders"
+                    }
+                } else {
+                    label += ", empty"
+                }
+
+                element.accessibilityLabel = label
+                element.accessibilityTraits = .button
+                element.accessibilityHint = "Double tap to select and edit"
+
+                // Project 3D node position to 2D screen coordinates
+                let screenPosition = sceneView.projectPoint(node.position)
+                let frameSize: CGFloat = 44.0 // Minimum touch target size per HIG
+                element.accessibilityFrame = CGRect(
+                    x: CGFloat(screenPosition.x) - frameSize / 2,
+                    y: CGFloat(screenPosition.y) - frameSize / 2,
+                    width: frameSize,
+                    height: frameSize
+                )
+
+                customAccessibilityElements.append(element)
+            }
+
+            // Update SceneView's accessibility elements
+            sceneView.accessibilityElements = customAccessibilityElements
+        }
+
         // MARK: - Gesture Handlers
 
         @objc func handlePinch(_ gesture: UIPinchGestureRecognizer) {
@@ -499,10 +654,16 @@ struct Scene3DView: UIViewRepresentable {
                 if let organizer = parent.organizer {
                     let matchingCompartment = organizer.compartmentsArray.first { $0.id == uuid }
                     parent.selectedCompartment = matchingCompartment
+
+                    // T077: Haptic feedback on selection
+                    selectionFeedback.selectionChanged()
                 }
             } else {
                 // Tapped on empty space - deselect
                 parent.selectedCompartment = nil
+
+                // T077: Light haptic feedback on deselection
+                impactFeedback.impactOccurred(intensity: 0.5)
             }
         }
 

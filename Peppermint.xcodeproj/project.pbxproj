@@ -3,37 +3,46 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 77;
+	objectVersion = 63;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0C518DCF6A3D36EFDCA2C719 /* OrganizerDesign+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20CD8EA2CAF1F4C6997A9653 /* OrganizerDesign+CoreDataProperties.swift */; };
+		091D82781B78D638235A7E66 /* STLExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A061185BC7F11DEA456F70B4 /* STLExporter.swift */; };
 		139C8E44E2EB16C724423B24 /* ConstructorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AB16A153B8168CF77997038 /* ConstructorView.swift */; };
 		17B9088DEAEA1865021F317E /* ExportHistory+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = F95B862AF6B59B16B15C9874 /* ExportHistory+CoreDataProperties.swift */; };
 		2177EBA9342C155A37C71DAD /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E61481A685941F855FE0CF /* ContentView.swift */; };
 		272C769DB6746AC865DF5EF8 /* ReminderSchedule+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22813F79F71C088C5E28383F /* ReminderSchedule+CoreDataClass.swift */; };
 		284354AD6CA42BB05E4A1F6D /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = C44C39D6601EEB05CB7E4A8A /* Localizable.strings */; };
 		29E935329243511E7F404814 /* ExportHistory+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1D7DF8BCD99678FCE1BFC77 /* ExportHistory+CoreDataClass.swift */; };
-		322B96D908A67D98ED008343 /* Compartment+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = F60A5A6FBCEBC0F85B5D349E /* Compartment+CoreDataClass.swift */; };
+		3643CF6BD942FEEE638BA556 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4829838B6950042B5A826A77 /* NotificationService.swift */; };
 		39A8F7124A277D25731227F1 /* Scene3DService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 240C043B9DE753BB03FA615F /* Scene3DService.swift */; };
 		433D337490096AD9EB373446 /* OrganizerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA7E75FA6C3C57FE5812BCFC /* OrganizerViewModel.swift */; };
 		5773E57DB5A4A4AE73B86ED7 /* MedicationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4FD866CD5381ED192ADEC8F /* MedicationViewModel.swift */; };
 		6521FDEF5E3133B89DA88BF4 /* PresetCompartments.json in Resources */ = {isa = PBXBuildFile; fileRef = 5F584DFB2226CDA9D952BFEC /* PresetCompartments.json */; };
 		65DA341CCA8237DDB122443D /* CompartmentDetailSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = C31735B4988C1EF296AB3226 /* CompartmentDetailSheet.swift */; };
-		683FE1AFDBB496AA8F2E637C /* SnapToGridCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D88338799142BDEB3A8F8717 /* SnapToGridCalculator.swift */; };
 		7082757334A04B31880D4CE3 /* DataPersistenceService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8A7796E0A84011585268E44 /* DataPersistenceService.swift */; };
 		7333075F883F2BFC45903DF4 /* PeppermintDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 42E65113F5509F80F567218D /* PeppermintDataModel.xcdatamodeld */; };
-		781B2897B1F6266C34878263 /* OrganizerDesign+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B49DFD72BAEC10017A6DA7C /* OrganizerDesign+CoreDataClass.swift */; };
 		7DBD97414EC01E9AF27AE010 /* FrictionFitGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FC90A95E7AA53F30F139B1C /* FrictionFitGenerator.swift */; };
-		8185263E6EE7B056ED14AF1B /* BiometricAuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 343D2C2802AB25CC2774D237 /* BiometricAuthManager.swift */; };
 		8793F59F5D7657CF5BEA9773 /* ReminderSchedule+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBBDBC34B143C4C56C2E7AD7 /* ReminderSchedule+CoreDataProperties.swift */; };
 		9796E9B680B9D614D4B6BC4D /* Scene3DView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76AA53A0A00F990DFE5F3472 /* Scene3DView.swift */; };
 		9E338648DE498B3E5A4B2077 /* ComponentLibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0395037B7FDA1F5281C7280 /* ComponentLibraryView.swift */; };
-		A101959CC99DA88DD2F13B68 /* AccessibilityHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7C038C05F6FB2365737B5A /* AccessibilityHelper.swift */; };
+		A6B9D7667F022D858423593F /* ReminderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4660263D3D1313CC053A9E41 /* ReminderViewModel.swift */; };
 		B67AA88387C8ECAEB97206EC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D56FDEA7466ED07B54A6E03A /* Assets.xcassets */; };
-		CE5CC62F95F11ED51E83EF32 /* Medication+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B2E95E7868AB2FCF34023F /* Medication+CoreDataProperties.swift */; };
-		D91EB6F85C02DF3B8BC766F8 /* Medication+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6585A1591CD0EA7A06159A8 /* Medication+CoreDataClass.swift */; };
-		E33B7E2ECBC6FD5139A8D52C /* Compartment+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = E51242C0D32D795CB368FB1B /* Compartment+CoreDataProperties.swift */; };
+		C6B7B4DD2F66A62D00731350 /* BiometricAuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6B7B4D92F66A62D00731350 /* BiometricAuthManager.swift */; };
+		C6B7B4DE2F66A62D00731350 /* ServerConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6B7B4D52F66A62D00731350 /* ServerConfig.swift */; };
+		C6B7B4DF2F66A62D00731350 /* SnapToGridCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6B7B4DB2F66A62D00731350 /* SnapToGridCalculator.swift */; };
+		C6B7B4E02F66A62D00731350 /* KeychainHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6B7B4DA2F66A62D00731350 /* KeychainHelper.swift */; };
+		C6B7B4E12F66A62D00731350 /* AccessibilityHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6B7B4D82F66A62D00731350 /* AccessibilityHelper.swift */; };
+		C6B7B4E82F66B35D00731350 /* OrganizerDesign+CloudSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6B7B4E42F66B35D00731350 /* OrganizerDesign+CloudSync.swift */; };
+		C6B7B4EC2F66B61000731350 /* SyncConflict+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6B7B4EB2F66B61000731350 /* SyncConflict+Extensions.swift */; };
+		C6B7B4ED2F66B61000731350 /* PreviewCache+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6B7B4EA2F66B61000731350 /* PreviewCache+Extensions.swift */; };
+		C6B7B4F02F66B84100731350 /* OrganizerDesign+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6B7B4EF2F66B84100731350 /* OrganizerDesign+Helpers.swift */; };
+		C6B7B4F12F66B84100731350 /* Medication+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6B7B4EE2F66B84100731350 /* Medication+Helpers.swift */; };
+		C6B7B4F42F66BDBF00731350 /* OpenSCADAPIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6B7B4F22F66BDBF00731350 /* OpenSCADAPIService.swift */; };
+		C6B7B4F52F66BDBF00731350 /* PreviewCacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6B7B4F32F66BDBF00731350 /* PreviewCacheService.swift */; };
+		C6B7B4F72F66BDD100731350 /* STLLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6B7B4F62F66BDD100731350 /* STLLoader.swift */; };
+		C6B7B4F92F66BDE000731350 /* ExportPreviewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6B7B4F82F66BDE000731350 /* ExportPreviewViewModel.swift */; };
+		C6B7B4FC2F66BE1B00731350 /* ExportPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6B7B4FA2F66BE1B00731350 /* ExportPreviewView.swift */; };
 		E45ACE249D35686DE8A454CA /* OrganizerLibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0E3B3B8967543CFA1C26679 /* OrganizerLibraryView.swift */; };
 		EE05853A7616E4679A5CD793 /* PeppermintApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64B3450C3C805CB2DD1B5EB6 /* PeppermintApp.swift */; };
 /* End PBXBuildFile section */
@@ -56,13 +65,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		20CD8EA2CAF1F4C6997A9653 /* OrganizerDesign+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OrganizerDesign+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		22813F79F71C088C5E28383F /* ReminderSchedule+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ReminderSchedule+CoreDataClass.swift"; sourceTree = "<group>"; };
 		240C043B9DE753BB03FA615F /* Scene3DService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scene3DService.swift; sourceTree = "<group>"; };
-		343D2C2802AB25CC2774D237 /* BiometricAuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiometricAuthManager.swift; sourceTree = "<group>"; };
-		3A7C038C05F6FB2365737B5A /* AccessibilityHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilityHelper.swift; sourceTree = "<group>"; };
 		457FBEBF1F4CE5F4DD70FB65 /* PeppermintDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = PeppermintDataModel.xcdatamodel; sourceTree = "<group>"; };
-		45B2E95E7868AB2FCF34023F /* Medication+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Medication+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		4660263D3D1313CC053A9E41 /* ReminderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderViewModel.swift; sourceTree = "<group>"; };
+		4829838B6950042B5A826A77 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
 		4FC90A95E7AA53F30F139B1C /* FrictionFitGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrictionFitGenerator.swift; sourceTree = "<group>"; };
 		5F584DFB2226CDA9D952BFEC /* PresetCompartments.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = PresetCompartments.json; sourceTree = "<group>"; };
 		64B3450C3C805CB2DD1B5EB6 /* PeppermintApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeppermintApp.swift; sourceTree = "<group>"; };
@@ -71,7 +78,7 @@
 		7A8EE5A0D2DB96CAA2C0E428 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		84E61481A685941F855FE0CF /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		8AB16A153B8168CF77997038 /* ConstructorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConstructorView.swift; sourceTree = "<group>"; };
-		9B49DFD72BAEC10017A6DA7C /* OrganizerDesign+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OrganizerDesign+CoreDataClass.swift"; sourceTree = "<group>"; };
+		A061185BC7F11DEA456F70B4 /* STLExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STLExporter.swift; sourceTree = "<group>"; };
 		AB8DAB7E0F3820B6A6E17C79 /* PeppermintTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = PeppermintTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B0395037B7FDA1F5281C7280 /* ComponentLibraryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComponentLibraryView.swift; sourceTree = "<group>"; };
 		BA7E75FA6C3C57FE5812BCFC /* OrganizerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrganizerViewModel.swift; sourceTree = "<group>"; };
@@ -79,30 +86,42 @@
 		C1D7DF8BCD99678FCE1BFC77 /* ExportHistory+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ExportHistory+CoreDataClass.swift"; sourceTree = "<group>"; };
 		C31735B4988C1EF296AB3226 /* CompartmentDetailSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompartmentDetailSheet.swift; sourceTree = "<group>"; };
 		C44C39D6601EEB05CB7E4A8A /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
-		C6585A1591CD0EA7A06159A8 /* Medication+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Medication+CoreDataClass.swift"; sourceTree = "<group>"; };
+		C6B7B4D52F66A62D00731350 /* ServerConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerConfig.swift; sourceTree = "<group>"; };
+		C6B7B4D82F66A62D00731350 /* AccessibilityHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilityHelper.swift; sourceTree = "<group>"; };
+		C6B7B4D92F66A62D00731350 /* BiometricAuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiometricAuthManager.swift; sourceTree = "<group>"; };
+		C6B7B4DA2F66A62D00731350 /* KeychainHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainHelper.swift; sourceTree = "<group>"; };
+		C6B7B4DB2F66A62D00731350 /* SnapToGridCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapToGridCalculator.swift; sourceTree = "<group>"; };
+		C6B7B4E22F66A8A800731350 /* Peppermint.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Peppermint.entitlements; sourceTree = "<group>"; };
+		C6B7B4E32F66AA3000731350 /* PeppermintDataModel 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "PeppermintDataModel 3.xcdatamodel"; sourceTree = "<group>"; };
+		C6B7B4E42F66B35D00731350 /* OrganizerDesign+CloudSync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OrganizerDesign+CloudSync.swift"; sourceTree = "<group>"; };
+		C6B7B4EA2F66B61000731350 /* PreviewCache+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PreviewCache+Extensions.swift"; sourceTree = "<group>"; };
+		C6B7B4EB2F66B61000731350 /* SyncConflict+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SyncConflict+Extensions.swift"; sourceTree = "<group>"; };
+		C6B7B4EE2F66B84100731350 /* Medication+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Medication+Helpers.swift"; sourceTree = "<group>"; };
+		C6B7B4EF2F66B84100731350 /* OrganizerDesign+Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OrganizerDesign+Helpers.swift"; sourceTree = "<group>"; };
+		C6B7B4F22F66BDBF00731350 /* OpenSCADAPIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenSCADAPIService.swift; sourceTree = "<group>"; };
+		C6B7B4F32F66BDBF00731350 /* PreviewCacheService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewCacheService.swift; sourceTree = "<group>"; };
+		C6B7B4F62F66BDD100731350 /* STLLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = STLLoader.swift; sourceTree = "<group>"; };
+		C6B7B4F82F66BDE000731350 /* ExportPreviewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportPreviewViewModel.swift; sourceTree = "<group>"; };
+		C6B7B4FA2F66BE1B00731350 /* ExportPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportPreviewView.swift; sourceTree = "<group>"; };
 		D56FDEA7466ED07B54A6E03A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		D88338799142BDEB3A8F8717 /* SnapToGridCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapToGridCalculator.swift; sourceTree = "<group>"; };
 		D8A7796E0A84011585268E44 /* DataPersistenceService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataPersistenceService.swift; sourceTree = "<group>"; };
 		E0E3B3B8967543CFA1C26679 /* OrganizerLibraryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrganizerLibraryView.swift; sourceTree = "<group>"; };
 		E4FD866CD5381ED192ADEC8F /* MedicationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MedicationViewModel.swift; sourceTree = "<group>"; };
-		E51242C0D32D795CB368FB1B /* Compartment+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Compartment+CoreDataProperties.swift"; sourceTree = "<group>"; };
-		F60A5A6FBCEBC0F85B5D349E /* Compartment+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Compartment+CoreDataClass.swift"; sourceTree = "<group>"; };
 		F95B862AF6B59B16B15C9874 /* ExportHistory+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ExportHistory+CoreDataProperties.swift"; sourceTree = "<group>"; };
-		FDCEB8615CA4087662569E2C /* Peppermint.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Peppermint.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		FDCEB8615CA4087662569E2C /* Peppermint.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Peppermint.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
 		018843B2666594DBF4318683 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				F60A5A6FBCEBC0F85B5D349E /* Compartment+CoreDataClass.swift */,
-				E51242C0D32D795CB368FB1B /* Compartment+CoreDataProperties.swift */,
+				C6B7B4EE2F66B84100731350 /* Medication+Helpers.swift */,
+				C6B7B4EF2F66B84100731350 /* OrganizerDesign+Helpers.swift */,
+				C6B7B4EA2F66B61000731350 /* PreviewCache+Extensions.swift */,
+				C6B7B4EB2F66B61000731350 /* SyncConflict+Extensions.swift */,
+				C6B7B4E42F66B35D00731350 /* OrganizerDesign+CloudSync.swift */,
 				C1D7DF8BCD99678FCE1BFC77 /* ExportHistory+CoreDataClass.swift */,
 				F95B862AF6B59B16B15C9874 /* ExportHistory+CoreDataProperties.swift */,
-				C6585A1591CD0EA7A06159A8 /* Medication+CoreDataClass.swift */,
-				45B2E95E7868AB2FCF34023F /* Medication+CoreDataProperties.swift */,
-				9B49DFD72BAEC10017A6DA7C /* OrganizerDesign+CoreDataClass.swift */,
-				20CD8EA2CAF1F4C6997A9653 /* OrganizerDesign+CoreDataProperties.swift */,
 				42E65113F5509F80F567218D /* PeppermintDataModel.xcdatamodeld */,
 				22813F79F71C088C5E28383F /* ReminderSchedule+CoreDataClass.swift */,
 				BBBDBC34B143C4C56C2E7AD7 /* ReminderSchedule+CoreDataProperties.swift */,
@@ -152,8 +171,10 @@
 		5D08337290A351C1C3BABECD /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				C6B7B4F82F66BDE000731350 /* ExportPreviewViewModel.swift */,
 				E4FD866CD5381ED192ADEC8F /* MedicationViewModel.swift */,
 				BA7E75FA6C3C57FE5812BCFC /* OrganizerViewModel.swift */,
+				4660263D3D1313CC053A9E41 /* ReminderViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -161,6 +182,7 @@
 		70648B482BC8A3AA53462901 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				C6B7B4FB2F66BE1B00731350 /* Export */,
 				56EB7A951BDCF13E6CA32222 /* Constructor */,
 				AF3FF4FAC9D4FC7B69FE89F9 /* Library */,
 			);
@@ -172,16 +194,6 @@
 			children = (
 			);
 			path = PeppermintUITests;
-			sourceTree = "<group>";
-		};
-		74A036488CA1922B6F9A8B5F /* Utilities */ = {
-			isa = PBXGroup;
-			children = (
-				3A7C038C05F6FB2365737B5A /* AccessibilityHelper.swift */,
-				343D2C2802AB25CC2774D237 /* BiometricAuthManager.swift */,
-				D88338799142BDEB3A8F8717 /* SnapToGridCalculator.swift */,
-			);
-			path = Utilities;
 			sourceTree = "<group>";
 		};
 		AF3FF4FAC9D4FC7B69FE89F9 /* Library */ = {
@@ -209,12 +221,44 @@
 			);
 			sourceTree = "<group>";
 		};
+		C6B7B4D62F66A62D00731350 /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				C6B7B4D52F66A62D00731350 /* ServerConfig.swift */,
+			);
+			path = Config;
+			sourceTree = "<group>";
+		};
+		C6B7B4DC2F66A62D00731350 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				C6B7B4F62F66BDD100731350 /* STLLoader.swift */,
+				C6B7B4D82F66A62D00731350 /* AccessibilityHelper.swift */,
+				C6B7B4D92F66A62D00731350 /* BiometricAuthManager.swift */,
+				C6B7B4DA2F66A62D00731350 /* KeychainHelper.swift */,
+				C6B7B4DB2F66A62D00731350 /* SnapToGridCalculator.swift */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		C6B7B4FB2F66BE1B00731350 /* Export */ = {
+			isa = PBXGroup;
+			children = (
+				C6B7B4FA2F66BE1B00731350 /* ExportPreviewView.swift */,
+			);
+			path = Export;
+			sourceTree = "<group>";
+		};
 		D0113D81F5B470DDCB01DD88 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				C6B7B4F22F66BDBF00731350 /* OpenSCADAPIService.swift */,
+				C6B7B4F32F66BDBF00731350 /* PreviewCacheService.swift */,
 				D8A7796E0A84011585268E44 /* DataPersistenceService.swift */,
 				4FC90A95E7AA53F30F139B1C /* FrictionFitGenerator.swift */,
+				4829838B6950042B5A826A77 /* NotificationService.swift */,
 				240C043B9DE753BB03FA615F /* Scene3DService.swift */,
+				A061185BC7F11DEA456F70B4 /* STLExporter.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -222,15 +266,17 @@
 		DB3C8AEF838475BB0068CAF6 /* Peppermint */ = {
 			isa = PBXGroup;
 			children = (
+				C6B7B4E22F66A8A800731350 /* Peppermint.entitlements */,
 				D56FDEA7466ED07B54A6E03A /* Assets.xcassets */,
 				7A8EE5A0D2DB96CAA2C0E428 /* Info.plist */,
 				5AE2D6C96029B4C546AFCED2 /* App */,
 				018843B2666594DBF4318683 /* Models */,
 				571F839826BB4ADCAFE9C583 /* Resources */,
 				D0113D81F5B470DDCB01DD88 /* Services */,
-				74A036488CA1922B6F9A8B5F /* Utilities */,
 				5D08337290A351C1C3BABECD /* ViewModels */,
 				70648B482BC8A3AA53462901 /* Views */,
+				C6B7B4DC2F66A62D00731350 /* Utilities */,
+				C6B7B4D62F66A62D00731350 /* Config */,
 			);
 			path = Peppermint;
 			sourceTree = "<group>";
@@ -316,7 +362,6 @@
 			);
 			mainGroup = C326C21AC03C01E29229D0C8;
 			minimizedProjectReferenceProxies = 1;
-			preferredProjectObjectVersion = 77;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -359,32 +404,41 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A101959CC99DA88DD2F13B68 /* AccessibilityHelper.swift in Sources */,
-				8185263E6EE7B056ED14AF1B /* BiometricAuthManager.swift in Sources */,
-				322B96D908A67D98ED008343 /* Compartment+CoreDataClass.swift in Sources */,
-				E33B7E2ECBC6FD5139A8D52C /* Compartment+CoreDataProperties.swift in Sources */,
 				65DA341CCA8237DDB122443D /* CompartmentDetailSheet.swift in Sources */,
 				9E338648DE498B3E5A4B2077 /* ComponentLibraryView.swift in Sources */,
+				C6B7B4F02F66B84100731350 /* OrganizerDesign+Helpers.swift in Sources */,
+				C6B7B4F12F66B84100731350 /* Medication+Helpers.swift in Sources */,
 				139C8E44E2EB16C724423B24 /* ConstructorView.swift in Sources */,
 				2177EBA9342C155A37C71DAD /* ContentView.swift in Sources */,
 				7082757334A04B31880D4CE3 /* DataPersistenceService.swift in Sources */,
 				29E935329243511E7F404814 /* ExportHistory+CoreDataClass.swift in Sources */,
+				C6B7B4F72F66BDD100731350 /* STLLoader.swift in Sources */,
 				17B9088DEAEA1865021F317E /* ExportHistory+CoreDataProperties.swift in Sources */,
+				C6B7B4DD2F66A62D00731350 /* BiometricAuthManager.swift in Sources */,
+				C6B7B4F42F66BDBF00731350 /* OpenSCADAPIService.swift in Sources */,
+				C6B7B4FC2F66BE1B00731350 /* ExportPreviewView.swift in Sources */,
+				C6B7B4F52F66BDBF00731350 /* PreviewCacheService.swift in Sources */,
+				C6B7B4E82F66B35D00731350 /* OrganizerDesign+CloudSync.swift in Sources */,
+				C6B7B4DE2F66A62D00731350 /* ServerConfig.swift in Sources */,
+				C6B7B4EC2F66B61000731350 /* SyncConflict+Extensions.swift in Sources */,
+				C6B7B4ED2F66B61000731350 /* PreviewCache+Extensions.swift in Sources */,
+				C6B7B4DF2F66A62D00731350 /* SnapToGridCalculator.swift in Sources */,
+				C6B7B4E02F66A62D00731350 /* KeychainHelper.swift in Sources */,
+				C6B7B4E12F66A62D00731350 /* AccessibilityHelper.swift in Sources */,
 				7DBD97414EC01E9AF27AE010 /* FrictionFitGenerator.swift in Sources */,
-				D91EB6F85C02DF3B8BC766F8 /* Medication+CoreDataClass.swift in Sources */,
-				CE5CC62F95F11ED51E83EF32 /* Medication+CoreDataProperties.swift in Sources */,
 				5773E57DB5A4A4AE73B86ED7 /* MedicationViewModel.swift in Sources */,
-				781B2897B1F6266C34878263 /* OrganizerDesign+CoreDataClass.swift in Sources */,
-				0C518DCF6A3D36EFDCA2C719 /* OrganizerDesign+CoreDataProperties.swift in Sources */,
+				3643CF6BD942FEEE638BA556 /* NotificationService.swift in Sources */,
 				E45ACE249D35686DE8A454CA /* OrganizerLibraryView.swift in Sources */,
 				433D337490096AD9EB373446 /* OrganizerViewModel.swift in Sources */,
 				EE05853A7616E4679A5CD793 /* PeppermintApp.swift in Sources */,
 				7333075F883F2BFC45903DF4 /* PeppermintDataModel.xcdatamodeld in Sources */,
+				C6B7B4F92F66BDE000731350 /* ExportPreviewViewModel.swift in Sources */,
 				272C769DB6746AC865DF5EF8 /* ReminderSchedule+CoreDataClass.swift in Sources */,
 				8793F59F5D7657CF5BEA9773 /* ReminderSchedule+CoreDataProperties.swift in Sources */,
+				A6B9D7667F022D858423593F /* ReminderViewModel.swift in Sources */,
+				091D82781B78D638235A7E66 /* STLExporter.swift in Sources */,
 				39A8F7124A277D25731227F1 /* Scene3DService.swift in Sources */,
 				9796E9B680B9D614D4B6BC4D /* Scene3DView.swift in Sources */,
-				683FE1AFDBB496AA8F2E637C /* SnapToGridCalculator.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -592,8 +646,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Peppermint/Peppermint.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEVELOPMENT_ASSET_PATHS = "\"Peppermint/Preview Content\"";
+				DEVELOPMENT_TEAM = GF92XTPM25;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = Peppermint/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -611,8 +667,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Peppermint/Peppermint.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEVELOPMENT_ASSET_PATHS = "\"Peppermint/Preview Content\"";
+				DEVELOPMENT_TEAM = GF92XTPM25;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = Peppermint/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -670,9 +728,10 @@
 		42E65113F5509F80F567218D /* PeppermintDataModel.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				C6B7B4E32F66AA3000731350 /* PeppermintDataModel 3.xcdatamodel */,
 				457FBEBF1F4CE5F4DD70FB65 /* PeppermintDataModel.xcdatamodel */,
 			);
-			currentVersion = 457FBEBF1F4CE5F4DD70FB65 /* PeppermintDataModel.xcdatamodel */;
+			currentVersion = C6B7B4E32F66AA3000731350 /* PeppermintDataModel 3.xcdatamodel */;
 			path = PeppermintDataModel.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

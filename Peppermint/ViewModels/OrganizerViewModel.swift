@@ -10,6 +10,7 @@ import SwiftUI
 import Combine
 import CoreData
 import SceneKit
+import UniformTypeIdentifiers
 
 /// ViewModel managing organizer design state and operations
 @MainActor
@@ -30,6 +31,12 @@ class OrganizerViewModel: ObservableObject {
 
     /// Loading state for async operations
     @Published var isLoading: Bool = false
+
+    /// Export progress (0.0 to 1.0)
+    @Published var exportProgress: Double = 0.0
+
+    /// Exported STL file URL for sharing
+    @Published var exportedFileURL: URL?
 
     // MARK: - Private Properties
 
@@ -116,6 +123,12 @@ class OrganizerViewModel: ObservableObject {
 
         compartments.append(compartment)
 
+        // T069: Mark organizer for cloud sync when compartments are edited
+        organizer.modifiedAt = Date()
+        if organizer.cloudSyncEnabled {
+            organizer.markForSync()
+        }
+
         do {
             try persistenceService.viewContext.save()
         } catch {
@@ -124,6 +137,7 @@ class OrganizerViewModel: ObservableObject {
     }
 
     /// Check if a compartment would collide with existing compartments
+    /// T082: Uses spatial partitioning grid for O(1) neighbor lookup in large organizers
     /// - Parameters:
     ///   - compartment: The compartment to check
     ///   - organizer: The organizer containing existing compartments
@@ -138,7 +152,38 @@ class OrganizerViewModel: ObservableObject {
             maxZ: compartment.positionZ + compartment.depth
         )
 
-        for existing in compartments {
+        // T082: Spatial partitioning optimization
+        // For small compartment counts (<20), brute force is faster
+        if compartments.count < 20 {
+            for existing in compartments {
+                guard existing.id != compartment.id else { continue }
+
+                let existingBounds = CompartmentBounds(
+                    minX: existing.positionX,
+                    maxX: existing.positionX + existing.width,
+                    minY: existing.positionY,
+                    maxY: existing.positionY + existing.height,
+                    minZ: existing.positionZ,
+                    maxZ: existing.positionZ + existing.depth
+                )
+
+                if newBounds.intersects(existingBounds) {
+                    return true
+                }
+            }
+            return false
+        }
+
+        // For larger counts, use spatial grid (10mm cells)
+        // Only check compartments in nearby grid cells
+        let gridSize: Float = 10.0
+        let nearbyCompartments = getNearbyCompartments(
+            position: SIMD3(compartment.positionX, compartment.positionY, compartment.positionZ),
+            bounds: newBounds,
+            gridSize: gridSize
+        )
+
+        for existing in nearbyCompartments {
             guard existing.id != compartment.id else { continue }
 
             let existingBounds = CompartmentBounds(
@@ -158,6 +203,46 @@ class OrganizerViewModel: ObservableObject {
         return false
     }
 
+    /// T082: Get compartments in nearby spatial grid cells for optimized collision detection
+    private func getNearbyCompartments(position: SIMD3<Float>, bounds: CompartmentBounds, gridSize: Float) -> [Compartment] {
+        // Calculate grid cell ranges that overlap with the bounds
+        let minCellX = Int(floor(bounds.minX / gridSize))
+        let maxCellX = Int(ceil(bounds.maxX / gridSize))
+        let minCellY = Int(floor(bounds.minY / gridSize))
+        let maxCellY = Int(ceil(bounds.maxY / gridSize))
+        let minCellZ = Int(floor(bounds.minZ / gridSize))
+        let maxCellZ = Int(ceil(bounds.maxZ / gridSize))
+
+        // Build spatial hash for existing compartments
+        var spatialGrid: [String: [Compartment]] = [:]
+        for comp in compartments {
+            let cellX = Int(floor(comp.positionX / gridSize))
+            let cellY = Int(floor(comp.positionY / gridSize))
+            let cellZ = Int(floor(comp.positionZ / gridSize))
+            let key = "\(cellX),\(cellY),\(cellZ)"
+
+            if spatialGrid[key] == nil {
+                spatialGrid[key] = []
+            }
+            spatialGrid[key]?.append(comp)
+        }
+
+        // Collect compartments from overlapping cells
+        var nearby: [Compartment] = []
+        for x in minCellX...maxCellX {
+            for y in minCellY...maxCellY {
+                for z in minCellZ...maxCellZ {
+                    let key = "\(x),\(y),\(z)"
+                    if let cellCompartments = spatialGrid[key] {
+                        nearby.append(contentsOf: cellCompartments)
+                    }
+                }
+            }
+        }
+
+        return nearby
+    }
+
     /// Remove a compartment from the organizer
     /// - Parameter compartment: The compartment to remove
     func removeCompartment(_ compartment: Compartment) {
@@ -166,6 +251,14 @@ class OrganizerViewModel: ObservableObject {
 
         if selectedCompartment?.id == compartment.id {
             selectedCompartment = nil
+        }
+
+        // T069: Mark organizer for cloud sync when compartments are edited
+        if let organizer = currentOrganizer {
+            organizer.modifiedAt = Date()
+            if organizer.cloudSyncEnabled {
+                organizer.markForSync()
+            }
         }
 
         do {
@@ -235,6 +328,99 @@ class OrganizerViewModel: ObservableObject {
     /// - Parameter compartment: The compartment to select
     func selectCompartment(_ compartment: Compartment?) {
         self.selectedCompartment = compartment
+    }
+
+    // MARK: - STL Export
+
+    /// Export current organizer to STL file
+    /// - Returns: true if export succeeded, false otherwise
+    func exportToSTL() async -> Bool {
+        guard let organizer = currentOrganizer else {
+            errorMessage = "No organizer to export"
+            return false
+        }
+
+        guard !compartments.isEmpty else {
+            errorMessage = "Cannot export organizer with no compartments"
+            return false
+        }
+
+        isLoading = true
+        exportProgress = 0.0
+
+        do {
+            // Create temporary file URL
+            let tempDir = FileManager.default.temporaryDirectory
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd-HHmmss"
+            let dateString = dateFormatter.string(from: Date())
+            let sanitizedName = organizer.name?.replacingOccurrences(of: " ", with: "-") ?? "organizer"
+            let fileName = "\(sanitizedName)-\(dateString).stl"
+            let fileURL = tempDir.appendingPathComponent(fileName)
+
+            exportProgress = 0.3
+
+            // Export to STL
+            let stats = try STLExporter.export(organizer: organizer, to: fileURL)
+
+            exportProgress = 0.7
+
+            // Create export history record
+            let exportHistory = ExportHistory(context: persistenceService.viewContext)
+            exportHistory.id = UUID()
+            exportHistory.exportedAt = Date()
+            exportHistory.fileName = fileName
+            exportHistory.fileSize = stats.fileSize
+            exportHistory.compartmentCount = Int16(stats.compartmentCount)
+            exportHistory.exportDuration = stats.duration
+            exportHistory.organizer = organizer
+
+            try persistenceService.viewContext.save()
+
+            exportProgress = 1.0
+            exportedFileURL = fileURL
+
+            isLoading = false
+            return true
+
+        } catch let error as STLExportError {
+            isLoading = false
+            exportProgress = 0.0
+            errorMessage = error.localizedDescription
+            if let recovery = error.recoverySuggestion {
+                errorMessage = "\(error.localizedDescription)\n\n\(recovery)"
+            }
+            return false
+
+        } catch {
+            isLoading = false
+            exportProgress = 0.0
+            errorMessage = "Export failed: \(error.localizedDescription)"
+            return false
+        }
+    }
+
+    /// Get shareable items for iOS share sheet
+    /// - Returns: Array of shareable items (URL + metadata)
+    func getShareItems() -> [Any] {
+        guard let fileURL = exportedFileURL else { return [] }
+
+        var items: [Any] = [fileURL]
+
+        // Add metadata text
+        if let organizer = currentOrganizer {
+            let metadata = """
+            Peppermint 3D Pill Organizer
+            Name: \(organizer.name ?? "Untitled")
+            Compartments: \(compartments.count)
+            Exported: \(Date().formatted())
+
+            Ready for 3D printing!
+            """
+            items.append(metadata)
+        }
+
+        return items
     }
 }
 

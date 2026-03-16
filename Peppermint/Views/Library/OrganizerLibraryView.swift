@@ -32,9 +32,14 @@ struct OrganizerLibraryView: View {
     @State private var filterCategory: String?
     @State private var filterColor: String?
     @State private var showingFilterMenu = false
+    @State private var showingRenameAlert = false
+    @State private var organizerToRename: OrganizerDesign?
+    @State private var renameText = ""
+    @State private var showingSettings = false
 
     @StateObject private var viewModel = OrganizerViewModel()
     @StateObject private var medicationViewModel = MedicationViewModel()
+    @StateObject private var syncService = CloudSyncService()
 
     // MARK: - Body
 
@@ -50,8 +55,15 @@ struct OrganizerLibraryView: View {
             .navigationTitle("My Organizers")
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button(action: { showingFilterMenu = true }) {
-                        Image(systemName: filterCategory != nil || filterColor != nil ? "line.3.horizontal.decrease.circle.fill" : "line.3.horizontal.decrease.circle")
+                    HStack {
+                        // T068: Settings button
+                        Button(action: { showingSettings = true }) {
+                            Image(systemName: "gearshape")
+                        }
+
+                        Button(action: { showingFilterMenu = true }) {
+                            Image(systemName: filterCategory != nil || filterColor != nil ? "line.3.horizontal.decrease.circle.fill" : "line.3.horizontal.decrease.circle")
+                        }
                     }
                 }
 
@@ -79,6 +91,18 @@ struct OrganizerLibraryView: View {
             .sheet(isPresented: $showingNewOrganizerSheet) {
                 newOrganizerSheet
             }
+            .sheet(isPresented: $showingSettings) {
+                SettingsView()
+            }
+            // T085: Setup conflict observer when view appears
+            .onAppear {
+                syncService.setupConflictObserver()
+            }
+            // T090: Real-time sync status updates
+            .onReceive(NotificationCenter.default.publisher(for: .cloudSyncCompleted)) { _ in
+                // T091: Refresh organizer list UI when remote changes detected
+                viewContext.refreshAllObjects()
+            }
             .alert("Delete Organizer", isPresented: $showingDeleteConfirmation) {
                 Button("Cancel", role: .cancel) {
                     organizerToDelete = nil
@@ -90,6 +114,41 @@ struct OrganizerLibraryView: View {
                 }
             } message: {
                 Text("Are you sure you want to delete this organizer? This action cannot be undone.")
+            }
+            .alert("Rename Organizer", isPresented: $showingRenameAlert) {
+                TextField("Organizer Name", text: $renameText)
+                Button("Cancel", role: .cancel) {
+                    organizerToRename = nil
+                    renameText = ""
+                }
+                Button("Rename") {
+                    if let organizer = organizerToRename {
+                        performRename(organizer)
+                    }
+                }
+            } message: {
+                Text("Enter a new name for this organizer")
+            }
+            // T086-T089: Conflict resolution alert
+            .alert("Sync Conflict Detected", isPresented: $syncService.conflictDetected) {
+                // T087: Keep this device's changes
+                Button("Keep This Device's Changes") {
+                    syncService.resolveConflict(strategy: .keepLocal)
+                }
+                // T088: Use iCloud version
+                Button("Use iCloud Version") {
+                    syncService.resolveConflict(strategy: .keepRemote)
+                }
+                // T089: Merge (recommended)
+                Button("Merge (Recommended)", role: .cancel) {
+                    syncService.resolveConflict(strategy: .merge)
+                }
+            } message: {
+                if let conflict = syncService.currentConflict {
+                    Text(conflict.comparisonDescription)
+                } else {
+                    Text("This organizer was modified on another device. Choose how to resolve the conflict.")
+                }
             }
         }
     }
@@ -269,8 +328,26 @@ struct OrganizerLibraryView: View {
     }
 
     private func renameOrganizer(_ organizer: OrganizerDesign) {
-        // TODO: Implement rename functionality with alert
-        print("Rename organizer: \(organizer.name ?? "")")
+        organizerToRename = organizer
+        renameText = organizer.name ?? ""
+        showingRenameAlert = true
+    }
+
+    private func performRename(_ organizer: OrganizerDesign) {
+        let trimmedName = renameText.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmedName.isEmpty else { return }
+
+        organizer.name = trimmedName
+        organizer.modifiedAt = Date()
+
+        do {
+            try viewContext.save()
+        } catch {
+            print("Error renaming organizer: \(error)")
+        }
+
+        organizerToRename = nil
+        renameText = ""
     }
 
     private func duplicateOrganizer(_ organizer: OrganizerDesign) {
@@ -363,6 +440,11 @@ struct OrganizerThumbnailView: View {
 
                 Spacer()
 
+                // T070: Sync status indicators
+                if organizer.cloudSyncEnabled {
+                    syncStatusIndicator(for: organizer)
+                }
+
                 if let modifiedAt = organizer.modifiedAt {
                     Text(modifiedAt, style: .relative)
                         .font(.caption)
@@ -373,6 +455,33 @@ struct OrganizerThumbnailView: View {
         .padding(8)
         .background(Color(UIColor.secondarySystemBackground))
         .cornerRadius(12)
+    }
+
+    // T070: Sync status indicator
+    @ViewBuilder
+    private func syncStatusIndicator(for organizer: OrganizerDesign) -> some View {
+        let status = organizer.syncStatusEnum
+
+        switch status {
+        case .synced:
+            Image(systemName: "checkmark.icloud")
+                .font(.caption)
+                .foregroundColor(.green)
+        case .pending, .syncing:
+            Image(systemName: "arrow.triangle.2.circlepath.icloud")
+                .font(.caption)
+                .foregroundColor(.blue)
+        case .error:
+            Image(systemName: "exclamationmark.icloud")
+                .font(.caption)
+                .foregroundColor(.red)
+        case .conflict:
+            Image(systemName: "exclamationmark.triangle")
+                .font(.caption)
+                .foregroundColor(.orange)
+        case .local:
+            EmptyView()
+        }
     }
 }
 
